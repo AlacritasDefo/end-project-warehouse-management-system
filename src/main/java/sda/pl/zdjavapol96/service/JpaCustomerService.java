@@ -39,21 +39,18 @@ public class JpaCustomerService implements CustomerService{
 
     @Override
     public List<Customer> findAllCustomers() {
+        //TODO ZAIMPLEMENTOWAĆ findAll
         return customerRepository.findAllCustomers();
     }
 
     @Override
     public Customer update(Customer customerUpdate) {
+        //TODO ZAIMPLEMENTOWAĆ update
         return null;
     }
 
     @Override
-    public Optional<Customer> findById(long id) {
-        return Optional.empty();
-    }
-
-    @Override
     public void deleteById(long id) {
-
+        //TODO ZAIMPLEMENTOWAĆ delete
     }
 }

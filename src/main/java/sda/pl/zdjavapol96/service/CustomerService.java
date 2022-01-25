@@ -12,13 +12,8 @@ public interface CustomerService {
     Customer add(CustomerDto newCustomer);
     Optional<Customer> findCustomerByName(String name);
     List<Customer> findCustomerById(long id);
-
     List<Customer> findAllCustomers();
-
     Customer update(Customer customerUpdate);
-
-    Optional<Customer> findById(long id);
-
     void deleteById(long id);
 
 }
