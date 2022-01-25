@@ -4,18 +4,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import sda.pl.zdjavapol96.repository.UserAppRepository;
-import sda.pl.zdjavapol96.service.UserAppService;
 
 @SpringBootApplication
-public class EndProjectWarehouseManagmentSystemApplication implements CommandLineRunner {
+public class endProjectWarehouseManagementSystemApplication implements CommandLineRunner {
     private UserAppRepository userAppRepository;
 
-    public EndProjectWarehouseManagmentSystemApplication(){
+    public endProjectWarehouseManagementSystemApplication(){
 
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(EndProjectWarehouseManagmentSystemApplication.class, args);
+        SpringApplication.run(endProjectWarehouseManagementSystemApplication.class, args);
     }
 
     @Override
