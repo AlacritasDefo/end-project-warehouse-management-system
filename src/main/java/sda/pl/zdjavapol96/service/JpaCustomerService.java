@@ -19,9 +19,22 @@ public class JpaCustomerService implements CustomerService{
     }
     @Override
     public Customer add(CustomerDto newCustomer){
+        //TODO Zaimplementowac Customer ADD
         final Customer customer = Customer.builder()
                 .build();
         return customerRepository.save(customer);
+    }
+
+    @Override
+    public Optional<Customer> findCustomerByName(String name) {
+       //TODO Zaimplementowac findCustomerByName
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Customer> findCustomerById(long id) {
+        //TODO Zaimplementowac findCustomerById
+        return null;
     }
 
     @Override
