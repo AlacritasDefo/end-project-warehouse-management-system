@@ -1,0 +1,19 @@
+{
+  "name": "end-project-warehouse-managment-system",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlacritasDefo/end-project-warehouse-managment-system.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlacritasDefo/end-project-warehouse-managment-system/issues"
+  },
+  "homepage": "https://github.com/AlacritasDefo/end-project-warehouse-managment-system#readme"
+}
