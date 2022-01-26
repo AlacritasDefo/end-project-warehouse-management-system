@@ -4,15 +4,14 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Getter
-@Setter
-@ToString
 @Table(name = "productPrices")
 public class ProductPrice {
     @Id
@@ -25,8 +24,7 @@ public class ProductPrice {
     @Column(nullable = false)
     private BigDecimal sellingPrice;
     @Column(nullable = false)
-    private Date introductiontDate;
-
+    private LocalDate introductiontDate;
 
 
 }
