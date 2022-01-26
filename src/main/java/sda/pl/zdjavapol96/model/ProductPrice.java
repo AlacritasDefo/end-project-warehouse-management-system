@@ -25,6 +25,8 @@ public class ProductPrice {
     private BigDecimal sellingPrice;
     @Column(nullable = false)
     private LocalDate introductiontDate;
+    @ManyToOne(targetEntity = Product.class)
+    private Product product;
 
 
 }

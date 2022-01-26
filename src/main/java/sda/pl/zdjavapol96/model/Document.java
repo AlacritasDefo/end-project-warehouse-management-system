@@ -25,7 +25,7 @@ public class Document {
     @ManyToOne(targetEntity = Customer.class)
     private Customer customer;
     @Column(nullable = false)
-    @OneToMany
+    @OneToMany(targetEntity = DocumentElement.class)
     private Set<DocumentElement> documentElements = new LinkedHashSet<>();
     @Column(nullable = false)
     private LocalDate issueDate;

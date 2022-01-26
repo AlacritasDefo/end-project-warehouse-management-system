@@ -22,10 +22,10 @@ public class DocumentElement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(nullable = false, length = 20)
-    private long documentId;
-    @Column
-    private long productId;
+    @ManyToOne(targetEntity = Document.class)
+    private Document document;
+    @ManyToOne(targetEntity = Product.class)
+    private Product product;
     @Column(nullable = false, length = 20)
     private BigDecimal quantity;
     @Column(nullable = false,length = 25)
