@@ -17,17 +17,23 @@ public class JpaCustomerService implements CustomerService{
     public JpaCustomerService(CustomerRepository customerRepository){
         this.customerRepository = customerRepository;
     }
+
     @Override
     public Customer add(CustomerDto newCustomer){
-        //TODO Zaimplementowac Customer ADD
         final Customer customer = Customer.builder()
+                .name(newCustomer.getName())
+                .address(newCustomer.getAddress())
+                .country(newCustomer.getCountry())
+                .eMail(newCustomer.getEMail())
+                .phoneNumber(newCustomer.getPhoneNumber())
+                .taxId(newCustomer.getTaxId())
                 .build();
         return customerRepository.save(customer);
     }
 
     @Override
     public Optional<Customer> findByName(String name) {
-        return Optional.empty();
+        return customerRepository.findByName(name);
     }
 
     @Override
