@@ -33,5 +33,6 @@ public class Document {
     private long productPriceId;
     @ManyToOne(targetEntity = UserApp.class)
     private UserApp user;
+    
 
 }
