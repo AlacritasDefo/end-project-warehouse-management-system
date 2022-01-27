@@ -4,7 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDate;
+
 
 @Builder
 @NoArgsConstructor
@@ -19,14 +20,9 @@ public class ProductPrice {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(nullable = false)
-    private long productId;
-    @Column(nullable = false)
     private BigDecimal purchasePrice;
     @Column(nullable = false)
     private BigDecimal sellingPrice;
     @Column(nullable = false)
-    private Date introductiontDate;
-
-
-
+    private LocalDate introductionDate;
 }

@@ -23,6 +23,7 @@ public class DocumentElement {
     @Column(nullable = false, length = 20)
     private long documentId;
     @Column(nullable = false,unique = true, length = 50)
+    @ManyToOne(targetEntity = Product.class)
     private Product product;
     @Column(nullable = false, length = 20)
     private BigDecimal quantity;
