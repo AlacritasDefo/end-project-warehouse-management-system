@@ -30,7 +30,8 @@ public class Document {
     @Column(nullable = false)
     private LocalDate issueDate;
     @Column(nullable = false)
-    private long productPriceId;
+    @ManyToOne(targetEntity = ProductPrice.class)
+    private ProductPrice productPrice;
     @ManyToOne(targetEntity = UserApp.class)
     private UserApp user;
     

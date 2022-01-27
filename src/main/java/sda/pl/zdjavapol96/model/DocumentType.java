@@ -1,3 +1,4 @@
+
 package sda.pl.zdjavapol96.model;
 
 public enum DocumentType {

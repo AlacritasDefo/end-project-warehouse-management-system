@@ -6,11 +6,14 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Data
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
+@ToString
 @Table(name = "productPrices")
 public class ProductPrice {
     @Id
@@ -21,9 +24,5 @@ public class ProductPrice {
     @Column(nullable = false)
     private BigDecimal sellingPrice;
     @Column(nullable = false)
-    private LocalDate introductiontDate;
-    @ManyToOne(targetEntity = Product.class)
-    private Product product;
-
-
+    private LocalDate introductionDate;
 }
