@@ -10,10 +10,19 @@ import java.util.Optional;
 
 public interface CustomerService {
     Customer add(CustomerDto newCustomer);
+
     Optional<Customer> findByName(String name);
-    List<Customer> findById(long id);
+
+    Optional<Customer> findById(long id);
+
+    Optional<Customer> findByTaxId(long taxId);
+
+    Optional<Customer> findByPhoneNumber(long phoneNumber);
+
     List<Customer> findAll();
+
     Customer update(Customer customerUpdate);
+
     void deleteById(long id);
 
 }
