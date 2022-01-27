@@ -4,11 +4,14 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@Data
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Getter
+@Setter
+@ToString
 @Table(name = "customers")
 public class Customer {
         @Id
@@ -19,7 +22,7 @@ public class Customer {
         @Column(nullable = false,length = 20)
         private String country;
         @Column(nullable = false,length = 100)
-        private String address;
+        private String adress;
         @Column(nullable = false,length = 15)
         private long phoneNumber;
         @Column(length = 30)
