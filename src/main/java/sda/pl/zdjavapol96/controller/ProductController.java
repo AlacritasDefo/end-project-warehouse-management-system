@@ -16,18 +16,4 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/product/add")
-    public String productAddForm() {
-        return "/product/add-product-form";
-    }
-    @PostMapping("/product/add")
-    public String productAdd(@ModelAttribute ProductDto productDto, Model model){
-        model.addAttribute("product", productService.add(productDto));
-        return "/product/confirm-add-product";
-    }
-    @GetMapping("/product/list")
-    public String productList(Model model){
-        model.addAttribute("products", productService.findAllProducts());
-        return "/product/list";
-    }
 }

@@ -10,8 +10,8 @@ import java.util.Optional;
 
 public interface ProductService {
     Product add(ProductDto newProduct);
-    List<Product> findAllProducts();
-    List<Product> findProductById(long id);
-    Optional<Product> findProductByName(String name);
+    List<Product> findAll();
+    List<Product> findById(long id);
+    Optional<Product> findByName(String name);
 
 }
