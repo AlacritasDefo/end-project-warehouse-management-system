@@ -6,6 +6,4 @@ public enum DocumentType {
     SALES_INVOICE,
     GOODS_RECEIVED_NOTE,
     STOCK_ISSUE_CONFIRMATION
-
-
 }

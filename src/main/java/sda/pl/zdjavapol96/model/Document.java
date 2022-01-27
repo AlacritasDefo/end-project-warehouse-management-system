@@ -34,6 +34,4 @@ public class Document {
     private ProductPrice productPrice;
     @ManyToOne(targetEntity = UserApp.class)
     private UserApp user;
-    
-
 }
