@@ -23,19 +23,23 @@ public class JpaProductService implements ProductService{
        //TODO Zaimplementować ADD Product
         return null;
     }
+
     @Override
-    public List<Product> findAllProducts(){
-        return productRepository.findAllProducts();
+    public List<Product> findAll() {
+        return null;
     }
 
     @Override
-    public List<Product> findProductById(long id) {
-        return productRepository.findProductById(id);
+    public List<Product> findById(long id) {
+        return null;
     }
 
     @Override
-    public Optional<Product> findProductByName(String name) {
-        final Optional<Product> foundProduct = productRepository.findProductByName(name);
-        return foundProduct;
+    public Optional<Product> findByName(String name) {
+        return Optional.empty();
     }
+
+
+
+
 }

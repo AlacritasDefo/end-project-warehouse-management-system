@@ -16,21 +16,5 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
-    @GetMapping("/customer/add")
-    public String customerAddForm(){
-        return "/customer/add-customer-form";
-    }
-
-    @PostMapping("/customer/add")
-    public String customerAdd(@ModelAttribute CustomerDto customerDto, Model model){
-        model.addAttribute("customer", customerService.add(customerDto));
-        return "/customer/confirm-customer-add";
-    }
-
-    @GetMapping("/customer/list")
-    public String customerList(Model model){
-        model.addAttribute("customers", customerService.findAllCustomers());
-        return "/customer/list";
-    }
 
 }

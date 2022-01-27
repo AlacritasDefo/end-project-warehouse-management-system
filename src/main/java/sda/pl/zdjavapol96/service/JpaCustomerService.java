@@ -26,21 +26,18 @@ public class JpaCustomerService implements CustomerService{
     }
 
     @Override
-    public Optional<Customer> findCustomerByName(String name) {
-       //TODO Zaimplementowac findCustomerByName
+    public Optional<Customer> findByName(String name) {
         return Optional.empty();
     }
 
     @Override
-    public List<Customer> findCustomerById(long id) {
-        //TODO Zaimplementowac findCustomerById
+    public List<Customer> findById(long id) {
         return null;
     }
 
     @Override
-    public List<Customer> findAllCustomers() {
-        //TODO ZAIMPLEMENTOWAĆ findAll
-        return customerRepository.findAllCustomers();
+    public List<Customer> findAll() {
+        return null;
     }
 
     @Override
