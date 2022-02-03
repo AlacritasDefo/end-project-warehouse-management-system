@@ -1,15 +1,10 @@
 package sda.pl.zdjavapol96.model;
 
-
-import com.sun.xml.bind.v2.TODO;
 import lombok.*;
-import org.hibernate.annotations.Target;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+
 
 @Data
 @Builder

@@ -25,5 +25,4 @@ public class Product {
     private String unit;
     @Column(nullable = false,length = 15)
     private BigDecimal vat;
-
 }

@@ -21,9 +21,7 @@ public class ProductPrice {
     @Column(nullable = false)
     private BigDecimal sellingPrice;
     @Column(nullable = false)
-    private LocalDate introductiontDate;
+    private LocalDate introductionDate;
     @ManyToOne(targetEntity = Product.class)
     private Product product;
-
-
 }
