@@ -29,9 +29,6 @@ public class Document {
     private Set<DocumentElement> documentElements = new LinkedHashSet<>();
     @Column(nullable = false)
     private LocalDate issueDate;
-    @Column(nullable = false)
-    @ManyToOne(targetEntity = ProductPrice.class)
-    private ProductPrice productPrice;
     @ManyToOne(targetEntity = UserApp.class)
     private UserApp user;
 }

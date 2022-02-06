@@ -25,7 +25,7 @@ public class DocumentElement {
     private BigDecimal quantity;
     @Column(nullable = false,length = 25)
     private String unit;
-    @Column(nullable = false, length = 25)
-    private BigDecimal productPrice;
+    @ManyToOne(targetEntity = ProductPrice.class)
+    private ProductPrice productPrice;
 
 }
