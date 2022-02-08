@@ -35,7 +35,7 @@ public class JpaProductService implements ProductService{
     }
 
     @Override
-    public List<Product> findById(long id){
+    public Optional<Product> findById(long id){
         return productRepository.findById(id);
     }
 
