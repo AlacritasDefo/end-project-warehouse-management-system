@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Primary
 public class JpaProductService implements ProductService{
     private final ProductRepository productRepository;
 
@@ -20,8 +19,14 @@ public class JpaProductService implements ProductService{
 
     @Override
     public Product add(ProductDto newProduct) {
-       //TODO Zaimplementować ADD Product
-        return null;
+        Product product = Product.builder()
+                .productName(newProduct.getProductName())
+                .isSaleable(newProduct.isSaleable())
+                .quantity(newProduct.getQuantity())
+                .unit(newProduct.getUnit())
+                .vat(newProduct.getVat())
+                .build();
+        return productRepository.save(product);
     }
 
     @Override
@@ -30,16 +35,12 @@ public class JpaProductService implements ProductService{
     }
 
     @Override
-    public Optional<Product> findById(long id) {
+    public Optional<Product> findById(long id){
         return productRepository.findById(id);
     }
 
     @Override
-    public Optional<Product> findByName(String productName) {
-        return productRepository.findByName(productName);
+    public void deleteById(long id) {
+        productRepository.deleteById(id);
     }
-
-
-
-
 }

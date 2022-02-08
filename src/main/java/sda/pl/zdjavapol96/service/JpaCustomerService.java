@@ -1,6 +1,5 @@
 package sda.pl.zdjavapol96.service;
 
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import sda.pl.zdjavapol96.dto.CustomerDto;
 import sda.pl.zdjavapol96.model.Customer;
@@ -10,14 +9,12 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Primary
 public class JpaCustomerService implements CustomerService{
     private final CustomerRepository customerRepository;
 
     public JpaCustomerService(CustomerRepository customerRepository){
         this.customerRepository = customerRepository;
     }
-
     @Override
     public Customer add(CustomerDto newCustomer){
         final Customer customer = Customer.builder()
@@ -32,23 +29,13 @@ public class JpaCustomerService implements CustomerService{
     }
 
     @Override
-    public Optional<Customer> findByName(String name) {
+    public List<Customer> findByName(String name) {
         return customerRepository.findByName(name);
     }
 
     @Override
     public Optional<Customer> findById(long id) {
         return customerRepository.findById(id);
-    }
-
-    @Override
-    public Optional<Customer> findByTaxId(long taxId) {
-        return customerRepository.findByTaxID(taxId);
-    }
-
-    @Override
-    public Optional<Customer> findByPhoneNumber(long phoneNumber) {
-        return customerRepository.findByPhoneNumber(phoneNumber);
     }
 
     @Override
