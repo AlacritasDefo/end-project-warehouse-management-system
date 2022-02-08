@@ -23,7 +23,7 @@ public class UserApp implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column(unique = true)
-    private String userName;
+    private String username;
     private String password;
     private String firstName;
     private String lastName;
@@ -41,7 +41,7 @@ public class UserApp implements UserDetails {
     }
     @Override
     public String getUsername(){
-        return userName;
+        return username;
     }
     @Override
     public boolean isAccountNonExpired(){
