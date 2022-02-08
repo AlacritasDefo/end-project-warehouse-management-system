@@ -14,7 +14,7 @@ public class DocumentElementDto {
     @NotNull
     private String unit;
     @NotNull
-    private BigDecimal productPrice;
+    private long productPriceId;
     @NotNull
-    private ProductDto product;
+    private long productId;
 }
