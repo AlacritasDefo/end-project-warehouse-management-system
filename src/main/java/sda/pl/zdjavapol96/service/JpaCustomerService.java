@@ -1,6 +1,5 @@
 package sda.pl.zdjavapol96.service;
 
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import sda.pl.zdjavapol96.dto.CustomerDto;
 import sda.pl.zdjavapol96.model.Customer;
@@ -10,7 +9,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Primary
 public class JpaCustomerService implements CustomerService{
     private final CustomerRepository customerRepository;
 
@@ -19,35 +17,39 @@ public class JpaCustomerService implements CustomerService{
     }
     @Override
     public Customer add(CustomerDto newCustomer){
-        //TODO Zaimplementowac Customer ADD
         final Customer customer = Customer.builder()
+                .name(newCustomer.getName())
+                .address(newCustomer.getAddress())
+                .country(newCustomer.getCountry())
+                .eMail(newCustomer.getEMail())
+                .phoneNumber(newCustomer.getPhoneNumber())
+                .taxId(newCustomer.getTaxId())
                 .build();
         return customerRepository.save(customer);
     }
 
     @Override
-    public Optional<Customer> findByName(String name) {
-        return Optional.empty();
+    public List<Customer> findByName(String name) {
+        return customerRepository.findByName(name);
     }
 
     @Override
-    public List<Customer> findById(long id) {
-        return null;
+    public Optional<Customer> findById(long id) {
+        return customerRepository.findById(id);
     }
 
     @Override
     public List<Customer> findAll() {
-        return null;
+        return customerRepository.findAll();
     }
 
     @Override
     public Customer update(Customer customerUpdate) {
-        //TODO ZAIMPLEMENTOWAĆ update
-        return null;
+        return customerRepository.save(customerUpdate);
     }
 
     @Override
     public void deleteById(long id) {
-        //TODO ZAIMPLEMENTOWAĆ delete
+        customerRepository.deleteById(id);
     }
 }

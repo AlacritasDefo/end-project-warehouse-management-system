@@ -12,9 +12,9 @@ public class DocumentElementDto {
     @NotNull
     private BigDecimal quantity;
     @NotNull
-    private String unit;
+    private long productPriceId;
     @NotNull
-    private BigDecimal productPrice;
+    private long productId;
     @NotNull
-    private ProductDto product;
+    private long documentId;
 }

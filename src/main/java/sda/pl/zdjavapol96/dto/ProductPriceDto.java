@@ -17,5 +17,5 @@ public class ProductPriceDto {
     @NotNull
     private LocalDate introductionDate;
     @NotNull
-    private ProductDto product;
+    private long productId;
 }

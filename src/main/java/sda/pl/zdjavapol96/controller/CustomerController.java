@@ -9,7 +9,7 @@ import sda.pl.zdjavapol96.dto.CustomerDto;
 import sda.pl.zdjavapol96.service.CustomerService;
 
 @Controller
-public class CustomerController {
+public class  CustomerController {
     private final CustomerService customerService;
 
     public CustomerController(CustomerService customerService){
