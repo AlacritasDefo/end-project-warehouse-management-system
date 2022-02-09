@@ -9,10 +9,12 @@ import sda.pl.zdjavapol96.repository.DocumentRepository;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+
 import java.util.stream.Collectors;
 
+
 @Service
-public class JpaDocumentService implements DocumentService {
+public class JpaDocumentService implements DocumentService{
 
 
     private final DocumentRepository documentRepository;
@@ -38,6 +40,7 @@ public class JpaDocumentService implements DocumentService {
     }
 
     @Override
+
     public List<Document> findByCustomer(Customer customer) {
         return documentRepository.findDocumentByCustomerTaxId(customer.getTaxId());
     }
@@ -56,5 +59,11 @@ public class JpaDocumentService implements DocumentService {
     public List<Document> findByProduct(Product product) {
         List<DocumentElement> documentElementByProductId = documentElementRepository.findDocumentElementByProductId(product.getId());
         return documentElementByProductId.stream().map(DocumentElement::getDocument).distinct().collect(Collectors.toList());
+
+
+    @Override
+    public List<Document> findAll() {
+        return null;
+
     }
 }
