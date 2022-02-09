@@ -2,15 +2,14 @@ package sda.pl.zdjavapol96.service;
 
 import org.springframework.transaction.annotation.Transactional;
 import sda.pl.zdjavapol96.dto.DocumentElementDto;
-import sda.pl.zdjavapol96.model.Document;
-import sda.pl.zdjavapol96.model.DocumentElement;
-import sda.pl.zdjavapol96.model.Product;
-import sda.pl.zdjavapol96.model.ProductPrice;
+import sda.pl.zdjavapol96.exception.NotEnoughProductOnStock;
+import sda.pl.zdjavapol96.model.*;
 import sda.pl.zdjavapol96.repository.DocumentElementRepository;
 import sda.pl.zdjavapol96.repository.ProductRepository;
+
 import java.math.BigDecimal;
 
-public class JpaDocumentElementService implements DocumentElementService{
+public class JpaDocumentElementService implements DocumentElementService {
 
     private final DocumentElementRepository documentElementRepository;
     private final ProductRepository productRepository;
@@ -37,10 +36,22 @@ public class JpaDocumentElementService implements DocumentElementService{
                 .build();
         DocumentElement save = documentElementRepository.save(documentElement);
         Product product = productRepository.getById(newDocumentElement.getProductId());
-        BigDecimal quantity = product.getQuantity();
-        BigDecimal result = quantity.subtract(newDocumentElement.getQuantity());
-        product.setQuantity(result);
-        productRepository.save(product);
+        if (documentElement.getDocument().getDocumentType() == DocumentType.GOODS_RECEIVED_NOTE) {
+            BigDecimal quantity = product.getQuantity();
+            BigDecimal result = quantity.add(newDocumentElement.getQuantity());
+            product.setQuantity(result);
+            productRepository.save(product);
+        }
+        if (documentElement.getDocument().getDocumentType() == DocumentType.STOCK_ISSUE_CONFIRMATION) {
+            if (newDocumentElement.getQuantity().compareTo(product.getQuantity()) > 0) {
+                throw new NotEnoughProductOnStock("Zbyt mała ilość produktu w magazynie : ", product.getQuantity());
+            } else {
+                BigDecimal quantity = product.getQuantity();
+                BigDecimal result = quantity.subtract(newDocumentElement.getQuantity());
+                product.setQuantity(result);
+                productRepository.save(product);
+            }
+        }
         return save;
     }
 }

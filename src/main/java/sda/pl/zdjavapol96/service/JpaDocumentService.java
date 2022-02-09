@@ -2,10 +2,14 @@ package sda.pl.zdjavapol96.service;
 
 import org.springframework.stereotype.Service;
 import sda.pl.zdjavapol96.dto.DocumentDto;
-import sda.pl.zdjavapol96.model.Customer;
-import sda.pl.zdjavapol96.model.Document;
+import sda.pl.zdjavapol96.model.*;
 import sda.pl.zdjavapol96.repository.DocumentElementRepository;
 import sda.pl.zdjavapol96.repository.DocumentRepository;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class JpaDocumentService implements DocumentService {
@@ -28,8 +32,29 @@ public class JpaDocumentService implements DocumentService {
                         .build())
                 .issueDate(newDocument.getIssueDate())
                 .user(newDocument.getUser())
-                .documentElements(newDocument.getDocumentElements())
+                .documentElements(Set.of())
                 .build();
         return documentRepository.save(document);
+    }
+
+    @Override
+    public List<Document> findByCustomer(Customer customer) {
+        return documentRepository.findDocumentByCustomerTaxId(customer.getTaxId());
+    }
+
+    @Override
+    public Optional<Document> findById(long id) {
+        return documentRepository.findById(id);
+    }
+
+    @Override
+    public List<Document> findByDocumentType(DocumentType documentType) {
+        return documentRepository.findDocumentByDocumentType(documentType);
+    }
+
+    @Override
+    public List<Document> findByProduct(Product product) {
+        List<DocumentElement> documentElementByProductId = documentElementRepository.findDocumentElementByProductId(product.getId());
+        return documentElementByProductId.stream().map(DocumentElement::getDocument).distinct().collect(Collectors.toList());
     }
 }
