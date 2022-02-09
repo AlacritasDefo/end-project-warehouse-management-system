@@ -8,6 +8,8 @@ import sda.pl.zdjavapol96.repository.DocumentElementRepository;
 import sda.pl.zdjavapol96.repository.ProductRepository;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
 
 public class JpaDocumentElementService implements DocumentElementService {
 
@@ -53,5 +55,20 @@ public class JpaDocumentElementService implements DocumentElementService {
             }
         }
         return save;
+    }
+
+    @Override
+    public List<DocumentElement> findAll() {
+        return documentElementRepository.findAll();
+    }
+
+    @Override
+    public Optional<DocumentElement> findById(long id) {
+        return Optional.of(documentElementRepository.getById(id));
+    }
+
+    @Override
+    public void deleteById(long id) {
+        documentElementRepository.deleteById(id);
     }
 }
