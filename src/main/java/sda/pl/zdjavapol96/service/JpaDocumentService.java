@@ -7,8 +7,12 @@ import sda.pl.zdjavapol96.model.Document;
 import sda.pl.zdjavapol96.repository.DocumentElementRepository;
 import sda.pl.zdjavapol96.repository.DocumentRepository;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
 @Service
-public class JpaDocumentService implements DocumentService {
+public class JpaDocumentService implements DocumentService{
 
 
     private final DocumentRepository documentRepository;
@@ -28,8 +32,18 @@ public class JpaDocumentService implements DocumentService {
                         .build())
                 .issueDate(newDocument.getIssueDate())
                 .user(newDocument.getUser())
-                .documentElements(newDocument.getDocumentElements())
+                .documentElements(Set.of())
                 .build();
         return documentRepository.save(document);
+    }
+
+    @Override
+    public Optional<Document> findByID(long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<Document> findAll() {
+        return null;
     }
 }
