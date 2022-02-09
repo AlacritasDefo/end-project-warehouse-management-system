@@ -14,9 +14,7 @@ import java.util.stream.Collectors;
 
 
 @Service
-public class JpaDocumentService implements DocumentService{
-
-
+public class JpaDocumentService implements DocumentService {
     private final DocumentRepository documentRepository;
     private final DocumentElementRepository documentElementRepository;
 
@@ -40,9 +38,8 @@ public class JpaDocumentService implements DocumentService{
     }
 
     @Override
-
-    public List<Document> findByCustomer(Customer customer) {
-        return documentRepository.findDocumentByCustomerTaxId(customer.getTaxId());
+    public Optional<List<Document>> findByCustomer(Customer customer) {
+        return  documentRepository.findDocumentByCustomerId(customer.getId());
     }
 
     @Override
@@ -59,11 +56,10 @@ public class JpaDocumentService implements DocumentService{
     public List<Document> findByProduct(Product product) {
         List<DocumentElement> documentElementByProductId = documentElementRepository.findDocumentElementByProductId(product.getId());
         return documentElementByProductId.stream().map(DocumentElement::getDocument).distinct().collect(Collectors.toList());
-
+    }
 
     @Override
     public List<Document> findAll() {
-        return null;
-
+        return documentRepository.findAll();
     }
 }

@@ -6,6 +6,7 @@ import sda.pl.zdjavapol96.model.DocumentType;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface DocumentRepository extends JpaRepository<Document, Long> {
 
@@ -14,4 +15,5 @@ public interface DocumentRepository extends JpaRepository<Document, Long> {
     List<Document> findDocumentByIssueDate(LocalDate issueDate);
 
 
+    Optional<List<Document>> findDocumentByCustomerId(long id);
 }
