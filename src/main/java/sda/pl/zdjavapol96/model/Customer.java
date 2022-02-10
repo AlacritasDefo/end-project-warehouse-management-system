@@ -24,6 +24,6 @@ public class Customer {
         private long phoneNumber;
         @Column(length = 30)
         private String eMail;
-        @Column(length = 15,unique = true)
+        @Column(length = 15, unique = true)
         private String taxId;
 }

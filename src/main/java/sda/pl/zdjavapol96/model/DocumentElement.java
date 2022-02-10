@@ -23,8 +23,6 @@ public class DocumentElement {
     private Product product;
     @Column(nullable = false, length = 20)
     private BigDecimal quantity;
-    @Column(nullable = false,length = 25)
-    private String unit;
     @ManyToOne(targetEntity = ProductPrice.class)
     private ProductPrice productPrice;
 

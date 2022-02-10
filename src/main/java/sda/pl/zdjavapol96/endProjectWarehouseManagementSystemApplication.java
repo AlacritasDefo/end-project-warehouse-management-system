@@ -4,12 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import sda.pl.zdjavapol96.dto.CustomerDto;
+import sda.pl.zdjavapol96.dto.*;
+import sda.pl.zdjavapol96.model.DocumentElement;
+import sda.pl.zdjavapol96.model.DocumentType;
 import sda.pl.zdjavapol96.model.UserApp;
 import sda.pl.zdjavapol96.repository.UserAppRepository;
-import sda.pl.zdjavapol96.service.CustomerService;
-import sda.pl.zdjavapol96.service.ProductPriceService;
-import sda.pl.zdjavapol96.service.ProductService;
+import sda.pl.zdjavapol96.service.*;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Optional;
+import java.util.Set;
 
 
 @SpringBootApplication
@@ -18,16 +23,22 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
     private CustomerService customerService;
     private ProductService productService;
     private ProductPriceService productPriceService;
+    private DocumentElementService documentElementService;
+    private DocumentService documentService;
 
 
     public endProjectWarehouseManagementSystemApplication(UserAppRepository userAppRepository,
                                                           CustomerService customerService,
                                                           ProductService productService,
-                                                          ProductPriceService productPriceService){
+                                                          ProductPriceService productPriceService,
+                                                          DocumentService documentService,
+                                                          DocumentElementService documentElementService){
         this.userAppRepository = userAppRepository;
         this.customerService = customerService;
         this.productService = productService;
         this.productPriceService = productPriceService;
+        this.documentElementService = documentElementService;
+        this.documentService = documentService;
     }
 
     public static void main(String[] args) {
@@ -38,7 +49,7 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
     public void run(String... args) throws Exception {
         userAppRepository.save(
                 UserApp.builder()
-                        .username("Arek")
+                        .username("Arek1234")
                         .password("1234")
                         .firstName("Arkadiusz")
                         .lastName("Przychocki")
@@ -51,8 +62,36 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
                         .country("Poland")
                         .eMail("mil-trans@gmail.com")
                         .phoneNumber(888111222)
-                        .taxId("PL1875285")
+                        .taxId("")
                 .build());
+        productService.add(ProductDto.builder()
+                        .productName("Gwóźdź")
+                        .unit("Sztuka")
+                        .quantity(BigDecimal.valueOf(100))
+                        .isSaleable(true)
+                        .vat(BigDecimal.valueOf(23))
+                .build());
+        productPriceService.add(ProductPriceDto.builder()
+                        .productId(1)
+                        .introductionDate(LocalDate.now())
+                        .sellingPrice(BigDecimal.valueOf(0.99))
+                        .purchasePrice(BigDecimal.valueOf(0.49))
+                .build());
+        documentService.add(DocumentDto.builder()
+                        .user(userAppRepository.getById(1L))
+                        .issueDate(LocalDate.now())
+                        .customerId(1)
+                        .documentType(DocumentType.SALES_INVOICE)
+                        .documentElements(Set.of())
+                .build());
+        documentElementService.add(DocumentElementDto.builder()
+                        .productId(01L)
+                        .productPriceId(01L)
+                        .documentId(01L)
+                        .quantity(BigDecimal.valueOf(1))
+                .build());
+
+
 
 
     }
