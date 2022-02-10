@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sda.pl.zdjavapol96.dto.DocumentElementDto;
 import sda.pl.zdjavapol96.mapper.DocumentElementMapper;
+import sda.pl.zdjavapol96.mapper.DocumentMapper;
+import sda.pl.zdjavapol96.model.Document;
 import sda.pl.zdjavapol96.model.DocumentElement;
 import sda.pl.zdjavapol96.service.DocumentElementService;
 

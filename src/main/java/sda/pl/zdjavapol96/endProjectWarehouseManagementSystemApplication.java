@@ -3,19 +3,15 @@ package sda.pl.zdjavapol96;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import sda.pl.zdjavapol96.dto.CustomerDto;
-import sda.pl.zdjavapol96.dto.DocumentElementDto;
-import sda.pl.zdjavapol96.dto.ProductDto;
-import sda.pl.zdjavapol96.dto.ProductPriceDto;
+import sda.pl.zdjavapol96.dto.*;
+import sda.pl.zdjavapol96.model.DocumentType;
 import sda.pl.zdjavapol96.model.UserApp;
 import sda.pl.zdjavapol96.repository.UserAppRepository;
-import sda.pl.zdjavapol96.service.CustomerService;
-import sda.pl.zdjavapol96.service.DocumentElementService;
-import sda.pl.zdjavapol96.service.ProductPriceService;
-import sda.pl.zdjavapol96.service.ProductService;
+import sda.pl.zdjavapol96.service.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
 
 
 @SpringBootApplication
@@ -25,17 +21,19 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
     private ProductService productService;
     private ProductPriceService productPriceService;
     private final DocumentElementService documentElementService;
+    private final DocumentService documentService;
 
 
     public endProjectWarehouseManagementSystemApplication(UserAppRepository userAppRepository,
                                                           CustomerService customerService,
                                                           ProductService productService,
-                                                          ProductPriceService productPriceService, DocumentElementService documentElementService){
+                                                          ProductPriceService productPriceService, DocumentElementService documentElementService, DocumentService documentService){
         this.userAppRepository = userAppRepository;
         this.customerService = customerService;
         this.productService = productService;
         this.productPriceService = productPriceService;
         this.documentElementService = documentElementService;
+        this.documentService = documentService;
     }
 
     public static void main(String[] args) {
@@ -85,6 +83,13 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
                 .productId(1)
                 .build());
 
+
+        documentService.add(DocumentDto.builder().documentType(DocumentType.PURCHASE_INVOICE)
+                .issueDate(LocalDate.of(2020,11,21))
+                .customerId(1)
+                .userId(1)
+                .documentElements(Set.of())
+                .build());
 
         documentElementService.add(DocumentElementDto.builder()
                 .documentId(1)

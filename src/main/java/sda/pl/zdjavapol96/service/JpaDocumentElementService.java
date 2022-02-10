@@ -34,8 +34,8 @@ public class JpaDocumentElementService implements DocumentElementService {
         List<ProductPrice> pricesByProductId = productPriceRepository.findProductPricesByProductId(newDocumentElement.getProductId());
         pricesByProductId.sort((p1, p2) -> {
             if (p1.getIntroductionDate().isBefore(p2.getIntroductionDate()))
-                return -1;
-            else return 1;
+                return 1;
+            else return -1;
         });
         Optional<ProductPrice> first = pricesByProductId.stream().findFirst();
 
@@ -72,13 +72,14 @@ public class JpaDocumentElementService implements DocumentElementService {
 
     @Override
     public List<DocumentElement> findAll() {
-        return null;
+        return documentElementRepository.findAll();
     }
 
     @Override
     public Optional<DocumentElement> findById(long id) {
-        return Optional.empty();
+        return documentElementRepository.findById(id);
     }
+
 
     @Override
     public void deleteById(long id) {

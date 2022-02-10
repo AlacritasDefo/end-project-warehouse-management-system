@@ -13,12 +13,7 @@ public class UserAppDto {
     @Length(min = 3, max = 25, message = "Username must be 3 to 25 characters long")
     private String username;
     @NotNull
-    private String password;
-    @NotNull
     private String firstName;
     @NotNull
     private String lastName;
-    private boolean locked;
-    @NotNull
-    private String roles;
 }

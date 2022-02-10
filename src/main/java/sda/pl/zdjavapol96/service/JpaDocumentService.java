@@ -5,6 +5,7 @@ import sda.pl.zdjavapol96.dto.DocumentDto;
 import sda.pl.zdjavapol96.model.*;
 import sda.pl.zdjavapol96.repository.DocumentElementRepository;
 import sda.pl.zdjavapol96.repository.DocumentRepository;
+import sda.pl.zdjavapol96.repository.UserAppRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +18,12 @@ import java.util.stream.Collectors;
 public class JpaDocumentService implements DocumentService {
     private final DocumentRepository documentRepository;
     private final DocumentElementRepository documentElementRepository;
+    private final UserAppRepository userAppRepository;
 
-    public JpaDocumentService(DocumentRepository documentRepository, DocumentElementRepository documentElementRepository) {
+    public JpaDocumentService(DocumentRepository documentRepository, DocumentElementRepository documentElementRepository, UserAppRepository userAppRepository) {
         this.documentRepository = documentRepository;
         this.documentElementRepository = documentElementRepository;
+        this.userAppRepository = userAppRepository;
     }
 
     @Override
@@ -31,7 +34,7 @@ public class JpaDocumentService implements DocumentService {
                         .id(newDocument.getCustomerId())
                         .build())
                 .issueDate(newDocument.getIssueDate())
-                .user(newDocument.getUser())
+                .user(userAppRepository.getById(newDocument.getUserId()))
                 .documentElements(Set.of())
                 .build();
         return documentRepository.save(document);

@@ -32,10 +32,7 @@ public class DocumentController {
     @GetMapping("/{id}")
     public ResponseEntity<DocumentDto> findById(@PathVariable long id){
         final Optional<Document> optionalDocument = documentService.findById(id);
-        if (optionalDocument.isPresent()){
-            return ResponseEntity.ok(DocumentMapper.mapToDto(optionalDocument.get()));
-        }
-        return ResponseEntity.of(Optional.empty());
+        return optionalDocument.map(document -> ResponseEntity.ok(DocumentMapper.mapToDto(document))).orElseGet(() -> ResponseEntity.of(Optional.empty()));
     }
 
     @GetMapping("/type")
