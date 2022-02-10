@@ -1,31 +1,43 @@
 package sda.pl.zdjavapol96.service;
 
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sda.pl.zdjavapol96.dto.DocumentElementDto;
 import sda.pl.zdjavapol96.exception.NotEnoughProductOnStock;
 import sda.pl.zdjavapol96.model.*;
 import sda.pl.zdjavapol96.repository.DocumentElementRepository;
+import sda.pl.zdjavapol96.repository.ProductPriceRepository;
 import sda.pl.zdjavapol96.repository.ProductRepository;
 
 import java.math.BigDecimal;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
-@Service
 public class JpaDocumentElementService implements DocumentElementService {
 
     private final DocumentElementRepository documentElementRepository;
     private final ProductRepository productRepository;
+    private final ProductPriceRepository productPriceRepository;
 
-    public JpaDocumentElementService(DocumentElementRepository documentElementRepository, ProductRepository productRepository) {
+    public JpaDocumentElementService(DocumentElementRepository documentElementRepository, ProductRepository productRepository, ProductPriceRepository productPriceRepository) {
         this.documentElementRepository = documentElementRepository;
         this.productRepository = productRepository;
+        this.productPriceRepository = productPriceRepository;
     }
 
     @Override
     @Transactional
     public DocumentElement add(DocumentElementDto newDocumentElement) {
+        List<ProductPrice> pricesByProductId = productPriceRepository.findProductPricesByProductId(newDocumentElement.getProductId());
+        pricesByProductId.sort((p1, p2) -> {
+            if (p1.getIntroductionDate().isBefore(p2.getIntroductionDate()))
+                return -1;
+            else return 1;
+        });
+        Optional<ProductPrice> first = pricesByProductId.stream().findFirst();
+
         DocumentElement documentElement = DocumentElement.builder()
                 .document(Document.builder()
                         .id(newDocumentElement.getDocumentId())
@@ -34,9 +46,9 @@ public class JpaDocumentElementService implements DocumentElementService {
                         .id(newDocumentElement.getProductId())
                         .build())
                 .quantity(newDocumentElement.getQuantity())
-                .productPrice(ProductPrice.builder()
+                .productPrice(first.orElse(ProductPrice.builder()
                         .id(newDocumentElement.getProductPriceId())
-                        .build())
+                        .build()))
                 .build();
         DocumentElement save = documentElementRepository.save(documentElement);
         Product product = productRepository.getById(newDocumentElement.getProductId());
@@ -57,20 +69,5 @@ public class JpaDocumentElementService implements DocumentElementService {
             }
         }
         return save;
-    }
-
-    @Override
-    public List<DocumentElement> findAll() {
-        return documentElementRepository.findAll();
-    }
-
-    @Override
-    public Optional<DocumentElement> findById(long id) {
-        return Optional.of(documentElementRepository.getById(id));
-    }
-
-    @Override
-    public void deleteById(long id) {
-        documentElementRepository.deleteById(id);
     }
 }
