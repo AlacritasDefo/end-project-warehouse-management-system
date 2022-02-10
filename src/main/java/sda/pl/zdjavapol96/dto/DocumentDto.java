@@ -21,7 +21,7 @@ public class DocumentDto {
     @NotNull
     private long customerId;
     @NotNull
-    private UserApp user;
+    private long userId;
     private Set<DocumentElement> documentElements;
     private BigDecimal total;
 

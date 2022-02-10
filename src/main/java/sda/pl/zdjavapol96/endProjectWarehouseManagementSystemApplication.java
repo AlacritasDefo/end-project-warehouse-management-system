@@ -20,16 +20,14 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
     private CustomerService customerService;
     private ProductService productService;
     private ProductPriceService productPriceService;
-    private DocumentElementService documentElementService;
-    private DocumentService documentService;
+    private final DocumentElementService documentElementService;
+    private final DocumentService documentService;
 
 
     public endProjectWarehouseManagementSystemApplication(UserAppRepository userAppRepository,
                                                           CustomerService customerService,
                                                           ProductService productService,
-                                                          ProductPriceService productPriceService,
-                                                          DocumentService documentService,
-                                                          DocumentElementService documentElementService){
+                                                          ProductPriceService productPriceService, DocumentElementService documentElementService, DocumentService documentService){
         this.userAppRepository = userAppRepository;
         this.customerService = customerService;
         this.productService = productService;
@@ -46,7 +44,7 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
     public void run(String... args) throws Exception {
         userAppRepository.save(
                 UserApp.builder()
-                        .username("Arek1234")
+                        .username("Arek")
                         .password("1234")
                         .firstName("Arkadiusz")
                         .lastName("Przychocki")
@@ -59,33 +57,45 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
                         .country("Poland")
                         .eMail("mil-trans@gmail.com")
                         .phoneNumber(888111222)
-                        .taxId("")
+                        .taxId("PL1875285")
                 .build());
+
         productService.add(ProductDto.builder()
-                        .productName("Gwóźdź")
-                        .unit("Sztuka")
-                        .quantity(BigDecimal.valueOf(100))
-                        .isSaleable(true)
+                        .productName("Klucz")
+                        .quantity(BigDecimal.valueOf(22))
+                        .unit("szt")
                         .vat(BigDecimal.valueOf(23))
+                        .isSaleable(true)
                 .build());
+
+
         productPriceService.add(ProductPriceDto.builder()
+                        .purchasePrice(BigDecimal.valueOf(12.23))
+                        .sellingPrice(BigDecimal.valueOf(25.00))
+                        .introductionDate(LocalDate.of(2022,10,2))
                         .productId(1)
-                        .introductionDate(LocalDate.now())
-                        .sellingPrice(BigDecimal.valueOf(0.99))
-                        .purchasePrice(BigDecimal.valueOf(0.49))
                 .build());
-        documentService.add(DocumentDto.builder()
-                        .user(userAppRepository.getById(1L))
-                        .issueDate(LocalDate.now())
-                        .customerId(1)
-                        .documentType(DocumentType.SALES_INVOICE)
-                        .documentElements(Set.of())
+
+        productPriceService.add(ProductPriceDto.builder()
+                .purchasePrice(BigDecimal.valueOf(44.23))
+                .sellingPrice(BigDecimal.valueOf(56.00))
+                .introductionDate(LocalDate.of(2020,10,21))
+                .productId(1)
                 .build());
+
+
+        documentService.add(DocumentDto.builder().documentType(DocumentType.PURCHASE_INVOICE)
+                .issueDate(LocalDate.of(2020,11,21))
+                .customerId(1)
+                .userId(1)
+                .documentElements(Set.of())
+                .build());
+
         documentElementService.add(DocumentElementDto.builder()
-                        .productId(01L)
-                        .productPriceId(01L)
-                        .documentId(01L)
-                        .quantity(BigDecimal.valueOf(1))
+                .documentId(1)
+                .productId(1)
+                .productPriceId(1)
+                .quantity(BigDecimal.valueOf(5))
                 .build());
     }
 }

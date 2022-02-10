@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sda.pl.zdjavapol96.dto.DocumentElementDto;
 import sda.pl.zdjavapol96.mapper.DocumentElementMapper;
+import sda.pl.zdjavapol96.mapper.DocumentMapper;
+import sda.pl.zdjavapol96.model.Document;
 import sda.pl.zdjavapol96.model.DocumentElement;
 import sda.pl.zdjavapol96.service.DocumentElementService;
 
@@ -18,7 +20,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/documentelement")
 public class DocumentElementController {
 
-    private DocumentElementService documentElementService;
+    private final DocumentElementService documentElementService;
+
+    public DocumentElementController(DocumentElementService documentElementService) {
+        this.documentElementService = documentElementService;
+    }
 
     @GetMapping("")
     public List<DocumentElementDto> findAll(){
@@ -32,8 +38,9 @@ public class DocumentElementController {
     }
     @PostMapping("")
     public ResponseEntity<DocumentElement> add(@Valid @RequestBody DocumentElementDto dto){
+        final DocumentElement documentElement = documentElementService.add(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(documentElementService.add(dto));
+                .body(documentElement);
     }
     @DeleteMapping("/{id}")
     public void delete(@PathVariable long id){

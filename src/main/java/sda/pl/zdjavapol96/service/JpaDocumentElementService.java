@@ -15,7 +15,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 @Service
 public class JpaDocumentElementService implements DocumentElementService {
 
@@ -35,8 +34,8 @@ public class JpaDocumentElementService implements DocumentElementService {
         List<ProductPrice> pricesByProductId = productPriceRepository.findProductPricesByProductId(newDocumentElement.getProductId());
         pricesByProductId.sort((p1, p2) -> {
             if (p1.getIntroductionDate().isBefore(p2.getIntroductionDate()))
-                return -1;
-            else return 1;
+                return 1;
+            else return -1;
         });
         Optional<ProductPrice> first = pricesByProductId.stream().findFirst();
 
@@ -48,9 +47,7 @@ public class JpaDocumentElementService implements DocumentElementService {
                         .id(newDocumentElement.getProductId())
                         .build())
                 .quantity(newDocumentElement.getQuantity())
-                .productPrice(first.orElse(ProductPrice.builder()
-                        .id(newDocumentElement.getProductPriceId())
-                        .build()))
+                .productPrice(first.orElseThrow())
                 .build();
         DocumentElement save = documentElementRepository.save(documentElement);
         Product product = productRepository.getById(newDocumentElement.getProductId());
@@ -83,8 +80,9 @@ public class JpaDocumentElementService implements DocumentElementService {
         return documentElementRepository.findById(id);
     }
 
+
     @Override
     public void deleteById(long id) {
-        documentElementRepository.deleteById(id);
+
     }
 }
