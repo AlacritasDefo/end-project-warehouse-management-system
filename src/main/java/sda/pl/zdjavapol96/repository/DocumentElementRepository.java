@@ -12,4 +12,6 @@ public interface DocumentElementRepository extends JpaRepository<DocumentElement
     List<DocumentElement> findDocumentElementByDocumentDocumentType(DocumentType documentType);
     List<DocumentElement> findDocumentElementByProductId(long productId);
     List<DocumentElement> findDocumentElementByProductProductName(String productName);
+
+    void deleteById(long id);
 }

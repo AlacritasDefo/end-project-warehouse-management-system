@@ -15,7 +15,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/dokumentelement")
+@RequestMapping("/api/documentelement")
 public class DocumentElementController {
 
     private DocumentElementService documentElementService;

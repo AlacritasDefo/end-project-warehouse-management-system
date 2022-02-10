@@ -11,6 +11,7 @@ public class DocumentMapper {
                 .customerId(document.getCustomer().getId())
                 .issueDate(document.getIssueDate())
                 .user(document.getUser())
+                .total(document.getTotal())
                 .build();
     }
 }

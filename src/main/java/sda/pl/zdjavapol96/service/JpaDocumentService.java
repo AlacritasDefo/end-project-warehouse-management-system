@@ -33,6 +33,7 @@ public class JpaDocumentService implements DocumentService {
                 .issueDate(newDocument.getIssueDate())
                 .user(newDocument.getUser())
                 .documentElements(Set.of())
+                .total(newDocument.getTotal())
                 .build();
         return documentRepository.save(document);
     }

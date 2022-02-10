@@ -1,11 +1,9 @@
 package sda.pl.zdjavapol96;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import sda.pl.zdjavapol96.dto.*;
-import sda.pl.zdjavapol96.model.DocumentElement;
 import sda.pl.zdjavapol96.model.DocumentType;
 import sda.pl.zdjavapol96.model.UserApp;
 import sda.pl.zdjavapol96.repository.UserAppRepository;
@@ -13,7 +11,6 @@ import sda.pl.zdjavapol96.service.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Optional;
 import java.util.Set;
 
 
@@ -90,9 +87,5 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
                         .documentId(01L)
                         .quantity(BigDecimal.valueOf(1))
                 .build());
-
-
-
-
     }
 }
