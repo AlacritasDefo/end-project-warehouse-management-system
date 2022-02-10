@@ -18,7 +18,11 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/dokumentelement")
 public class DocumentElementController {
 
-    private DocumentElementService documentElementService;
+    private final DocumentElementService documentElementService;
+
+    public DocumentElementController(DocumentElementService documentElementService) {
+        this.documentElementService = documentElementService;
+    }
 
     @GetMapping("")
     public List<DocumentElementDto> findAll(){
@@ -32,8 +36,9 @@ public class DocumentElementController {
     }
     @PostMapping("")
     public ResponseEntity<DocumentElement> add(@Valid @RequestBody DocumentElementDto dto){
+        final DocumentElement documentElement = documentElementService.add(dto);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(documentElementService.add(dto));
+                .body(documentElement);
     }
     @DeleteMapping("/{id}")
     public void delete(@PathVariable long id){

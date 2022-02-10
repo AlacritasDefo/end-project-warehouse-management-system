@@ -1,5 +1,6 @@
 package sda.pl.zdjavapol96.service;
 
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sda.pl.zdjavapol96.dto.DocumentElementDto;
 import sda.pl.zdjavapol96.exception.NotEnoughProductOnStock;
@@ -14,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
+@Service
 public class JpaDocumentElementService implements DocumentElementService {
 
     private final DocumentElementRepository documentElementRepository;
@@ -46,9 +47,7 @@ public class JpaDocumentElementService implements DocumentElementService {
                         .id(newDocumentElement.getProductId())
                         .build())
                 .quantity(newDocumentElement.getQuantity())
-                .productPrice(first.orElse(ProductPrice.builder()
-                        .id(newDocumentElement.getProductPriceId())
-                        .build()))
+                .productPrice(first.orElseThrow())
                 .build();
         DocumentElement save = documentElementRepository.save(documentElement);
         Product product = productRepository.getById(newDocumentElement.getProductId());
@@ -69,5 +68,20 @@ public class JpaDocumentElementService implements DocumentElementService {
             }
         }
         return save;
+    }
+
+    @Override
+    public List<DocumentElement> findAll() {
+        return null;
+    }
+
+    @Override
+    public Optional<DocumentElement> findById(long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void deleteById(long id) {
+
     }
 }
