@@ -26,8 +26,8 @@ public class Document {
     @ManyToOne(targetEntity = Customer.class)
     private Customer customer;
     @Column(nullable = false)
-    @OneToMany(targetEntity = DocumentElement.class)
-    private Set<DocumentElement> documentElements = new LinkedHashSet<>();
+    @OneToMany(targetEntity = DocumentElement.class, fetch = FetchType.EAGER)
+    private Set<DocumentElement> documentElements;
     @Column(nullable = false)
     private LocalDate issueDate;
     @ManyToOne(targetEntity = UserApp.class)

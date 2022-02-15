@@ -10,6 +10,7 @@ import sda.pl.zdjavapol96.service.CustomerService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -31,8 +32,9 @@ public class  CustomerController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> findById(@PathVariable long id) {
-        return ResponseEntity.of(customerService.findById(id));
+    public ResponseEntity<CustomerDto> findById(@PathVariable long id) {
+        final Optional<Customer> optionalCustomer = customerService.findById(id);
+        return optionalCustomer.map(customer -> ResponseEntity.ok(CustomerMapper.mapToDto(customer))).orElseGet(() -> ResponseEntity.of(Optional.empty()));
     }
 
     @GetMapping("")

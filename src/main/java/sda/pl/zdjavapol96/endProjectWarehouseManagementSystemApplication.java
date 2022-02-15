@@ -64,7 +64,7 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
                         .productName("Klucz")
                         .quantity(BigDecimal.valueOf(22))
                         .unit("szt")
-                        .vat(BigDecimal.valueOf(23/100))
+                        .vat(BigDecimal.valueOf(23))
                         .isSaleable(true)
                 .build());
 
@@ -97,5 +97,6 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
                 .productPriceId(1)
                 .quantity(BigDecimal.valueOf(5))
                 .build());
-    }
+    System.out.println(documentElementService.findAll());}
+
 }

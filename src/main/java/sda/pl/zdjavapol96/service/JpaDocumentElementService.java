@@ -39,7 +39,6 @@ public class JpaDocumentElementService implements DocumentElementService {
         if (documentRepository.getById(newDocumentElement.getDocumentId()).getAccepted()== true) {
             throw new DocumentAlreadyAccepted("Dokument już zaakceptowany", newDocumentElement.getDocumentId());
         } else {
-   
 
         List<ProductPrice> pricesByProductId = productPriceRepository.findProductPricesByProductId(newDocumentElement.getProductId());
         pricesByProductId.sort((p1, p2) -> {

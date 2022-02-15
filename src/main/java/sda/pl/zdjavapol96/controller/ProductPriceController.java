@@ -4,10 +4,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sda.pl.zdjavapol96.dto.ProductPriceDto;
+
+import sda.pl.zdjavapol96.mapper.ProductPriceMapper;
+
 import sda.pl.zdjavapol96.model.ProductPrice;
 import sda.pl.zdjavapol96.service.ProductPriceService;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/productprice")
@@ -25,7 +29,8 @@ public class ProductPriceController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductPrice> findById(@PathVariable long id){
-        return ResponseEntity.of(productPriceService.findById(id));
+    public ResponseEntity<ProductPriceDto> findById(@PathVariable long id){
+        final Optional<ProductPrice> optionalPrice = productPriceService.findById(id);
+        return optionalPrice.map(price -> ResponseEntity.ok(ProductPriceMapper.mapToDto(price))).orElseGet(() -> ResponseEntity.of(Optional.empty()));
     }
 }

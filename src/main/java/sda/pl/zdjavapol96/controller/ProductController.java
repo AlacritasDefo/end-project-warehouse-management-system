@@ -5,10 +5,14 @@ import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
 import sda.pl.zdjavapol96.dto.ProductDto;
+import sda.pl.zdjavapol96.mapper.ProductMapper;
+
 import sda.pl.zdjavapol96.model.Product;
+
 import sda.pl.zdjavapol96.service.ProductService;
 
 import javax.validation.Valid;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/product")
@@ -27,7 +31,8 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> findById(@PathVariable long id) {
-        return ResponseEntity.of(productService.findById(id));
+    public ResponseEntity<ProductDto> findById(@PathVariable long id) {
+        final Optional<Product> optionalProduct = productService.findById(id);
+        return optionalProduct.map(product -> ResponseEntity.ok(ProductMapper.mapToDto(product))).orElseGet(() -> ResponseEntity.of(Optional.empty()));
     }
 }
