@@ -89,7 +89,6 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
                 .customerId(1)
                 .userId(1)
                 .documentElements(Set.of())
-                .total(BigDecimal.valueOf(0))
                 .build());
 
         documentElementService.add(DocumentElementDto.builder()

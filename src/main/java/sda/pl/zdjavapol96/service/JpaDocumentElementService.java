@@ -21,18 +21,16 @@ public class JpaDocumentElementService implements DocumentElementService {
     private final DocumentElementRepository documentElementRepository;
     private final ProductRepository productRepository;
     private final ProductPriceRepository productPriceRepository;
-    private final DocumentRepository documentRepository;
+
 
 
 
     public JpaDocumentElementService(DocumentRepository documentRepository, DocumentElementRepository documentElementRepository,
                                      ProductRepository productRepository, ProductPriceRepository productPriceRepository) {
         this.documentRepository = documentRepository;
-
         this.documentElementRepository = documentElementRepository;
         this.productRepository = productRepository;
         this.productPriceRepository = productPriceRepository;
-        this.documentRepository = documentRepository;
     }
     @Override
     @Transactional
@@ -77,6 +75,7 @@ public class JpaDocumentElementService implements DocumentElementService {
                 product.setQuantity(result);
                 productRepository.save(product);
             }
+        }
             Document document = documentRepository.getById(newDocumentElement.getDocumentId());
             BigDecimal vat = BigDecimal.ZERO;
             for(DocumentElement element : document.getDocumentElements()){
@@ -91,7 +90,7 @@ public class JpaDocumentElementService implements DocumentElementService {
                         .multiply(vat)
                         .add(documentElement.getProductPrice().getSellingPrice()));
             }
-            }
+
             return save;
         }
     }
