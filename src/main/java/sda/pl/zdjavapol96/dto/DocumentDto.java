@@ -23,6 +23,4 @@ public class DocumentDto {
     @NotNull
     private long userId;
     private Set<DocumentElement> documentElements;
-    private BigDecimal total;
-
 }

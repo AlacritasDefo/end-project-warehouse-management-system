@@ -17,60 +17,73 @@ import java.util.Optional;
 
 @Service
 public class JpaDocumentElementService implements DocumentElementService {
-
+    private final DocumentRepository documentRepository;
     private final DocumentElementRepository documentElementRepository;
     private final ProductRepository productRepository;
     private final ProductPriceRepository productPriceRepository;
     private final DocumentRepository documentRepository;
 
-    public JpaDocumentElementService(DocumentElementRepository documentElementRepository, ProductRepository productRepository, ProductPriceRepository productPriceRepository, DocumentRepository documentRepository) {
+
+
+    public JpaDocumentElementService(DocumentRepository documentRepository, DocumentElementRepository documentElementRepository,
+                                     ProductRepository productRepository, ProductPriceRepository productPriceRepository) {
+        this.documentRepository = documentRepository;
+
         this.documentElementRepository = documentElementRepository;
         this.productRepository = productRepository;
         this.productPriceRepository = productPriceRepository;
         this.documentRepository = documentRepository;
     }
-
     @Override
     @Transactional
     public DocumentElement add(DocumentElementDto newDocumentElement) {
+
         if (documentRepository.getById(newDocumentElement.getDocumentId()).getAccepted()== true) {
             throw new DocumentAlreadyAccepted("Dokument już zaakceptowany", newDocumentElement.getDocumentId());
         } else {
-            List<ProductPrice> pricesByProductId = productPriceRepository.findProductPricesByProductId(newDocumentElement.getProductId());
-            pricesByProductId.sort((p1, p2) -> {
-                if (p1.getIntroductionDate().isBefore(p2.getIntroductionDate()))
-                    return 1;
-                else return -1;
-            });
-            Optional<ProductPrice> first = pricesByProductId.stream().findFirst();
+   
 
-            DocumentElement documentElement = DocumentElement.builder()
-                    .document(Document.builder()
-                            .id(newDocumentElement.getDocumentId())
-                            .build())
-                    .product(Product.builder()
-                            .id(newDocumentElement.getProductId())
-                            .build())
-                    .quantity(newDocumentElement.getQuantity())
-                    .productPrice(first.orElseThrow())
-                    .build();
-            DocumentElement save = documentElementRepository.save(documentElement);
-            Product product = productRepository.getById(newDocumentElement.getProductId());
-            if (documentElement.getDocument().getDocumentType() == DocumentType.GOODS_RECEIVED_NOTE) {
+        List<ProductPrice> pricesByProductId = productPriceRepository.findProductPricesByProductId(newDocumentElement.getProductId());
+        pricesByProductId.sort((p1, p2) -> {
+            if (p1.getIntroductionDate().isBefore(p2.getIntroductionDate()))
+                return 1;
+            else return -1;
+        });
+        Optional<ProductPrice> first = pricesByProductId.stream().findFirst();
+        DocumentElement documentElement = DocumentElement.builder()
+                .document(Document.builder()
+                        .id(newDocumentElement.getDocumentId())
+                        .build())
+                .product(Product.builder()
+                        .id(newDocumentElement.getProductId())
+                        .build())
+                .quantity(newDocumentElement.getQuantity())
+                .productPrice(first.orElseThrow())
+                .build();
+        DocumentElement save = documentElementRepository.save(documentElement);
+        Product product = productRepository.getById(newDocumentElement.getProductId());
+        if (documentElement.getDocument().getDocumentType() == DocumentType.GOODS_RECEIVED_NOTE) {
+            BigDecimal quantity = product.getQuantity();
+            BigDecimal result = quantity.add(newDocumentElement.getQuantity());
+            product.setQuantity(result);
+            productRepository.save(product);
+        }
+        if (documentElement.getDocument().getDocumentType() == DocumentType.STOCK_ISSUE_CONFIRMATION) {
+            if (newDocumentElement.getQuantity().compareTo(product.getQuantity()) > 0) {
+                throw new NotEnoughProductOnStock("Zbyt mała ilość produktu w magazynie : ", product.getQuantity());
+            } else {
                 BigDecimal quantity = product.getQuantity();
                 BigDecimal result = quantity.add(newDocumentElement.getQuantity());
                 product.setQuantity(result);
                 productRepository.save(product);
             }
-            if (documentElement.getDocument().getDocumentType() == DocumentType.STOCK_ISSUE_CONFIRMATION) {
-                if (newDocumentElement.getQuantity().compareTo(product.getQuantity()) > 0) {
-                    throw new NotEnoughProductOnStock("Zbyt mała ilość produktu w magazynie : ", product.getQuantity());
-                } else {
-                    BigDecimal quantity = product.getQuantity();
-                    BigDecimal result = quantity.subtract(newDocumentElement.getQuantity());
-                    product.setQuantity(result);
-                    productRepository.save(product);
-                }
+            Document document = documentRepository.getById(newDocumentElement.getDocumentId());
+            BigDecimal totalNet = BigDecimal.ZERO;
+            BigDecimal totalGross = BigDecimal.ZERO;
+            for (DocumentElement element : document.getDocumentElements()) {
+                totalNet = totalNet.add(documentElement.getProductPrice().getSellingPrice());
+                totalGross = totalGross.add(documentElement.getProductPrice().getSellingPrice().multiply(documentElement.getProduct().getVat()));
+            }
             }
             return save;
         }
@@ -86,9 +99,8 @@ public class JpaDocumentElementService implements DocumentElementService {
         return documentElementRepository.findById(id);
     }
 
-
     @Override
     public void deleteById(long id) {
-
+        documentElementRepository.deleteById(id);
     }
 }

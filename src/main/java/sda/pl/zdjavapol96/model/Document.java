@@ -32,8 +32,10 @@ public class Document {
     private LocalDate issueDate;
     @ManyToOne(targetEntity = UserApp.class)
     private UserApp user;
-    @Column(name = "total")
-    private BigDecimal total;
+    @Column(name = "totalnet")
+    private BigDecimal totalNet;
+    @Column(name = "totalgros")
+    private BigDecimal totalGros;
     @Column(name = "accepted")
     private Boolean accepted;
 }

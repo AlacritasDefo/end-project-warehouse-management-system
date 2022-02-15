@@ -7,6 +7,7 @@ import sda.pl.zdjavapol96.repository.DocumentElementRepository;
 import sda.pl.zdjavapol96.repository.DocumentRepository;
 import sda.pl.zdjavapol96.repository.UserAppRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -36,7 +37,9 @@ public class JpaDocumentService implements DocumentService {
                 .issueDate(newDocument.getIssueDate())
                 .user(userAppRepository.getById(newDocument.getUserId()))
                 .documentElements(Set.of())
-                .total(newDocument.getTotal())
+                .totalNet(BigDecimal.ZERO)
+                .totalGros(BigDecimal.ZERO)
+                .accepted(false)
                 .build();
         return documentRepository.save(document);
     }
@@ -65,5 +68,11 @@ public class JpaDocumentService implements DocumentService {
     @Override
     public List<Document> findAll() {
         return documentRepository.findAll();
+    }
+
+    @Override
+    public Document update(Document newUpdateDocument) {
+        documentRepository.save(newUpdateDocument);
+        return newUpdateDocument;
     }
 }
