@@ -3,6 +3,7 @@ package sda.pl.zdjavapol96.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sda.pl.zdjavapol96.dto.DocumentElementDto;
+import sda.pl.zdjavapol96.exception.DocumentAlreadyAccepted;
 import sda.pl.zdjavapol96.exception.NotEnoughProductOnStock;
 import sda.pl.zdjavapol96.model.*;
 import sda.pl.zdjavapol96.repository.DocumentElementRepository;
@@ -20,17 +21,28 @@ public class JpaDocumentElementService implements DocumentElementService {
     private final DocumentElementRepository documentElementRepository;
     private final ProductRepository productRepository;
     private final ProductPriceRepository productPriceRepository;
+    private final DocumentRepository documentRepository;
+
+
 
     public JpaDocumentElementService(DocumentRepository documentRepository, DocumentElementRepository documentElementRepository,
                                      ProductRepository productRepository, ProductPriceRepository productPriceRepository) {
         this.documentRepository = documentRepository;
+
         this.documentElementRepository = documentElementRepository;
         this.productRepository = productRepository;
         this.productPriceRepository = productPriceRepository;
+        this.documentRepository = documentRepository;
     }
     @Override
     @Transactional
     public DocumentElement add(DocumentElementDto newDocumentElement) {
+
+        if (documentRepository.getById(newDocumentElement.getDocumentId()).getAccepted()== true) {
+            throw new DocumentAlreadyAccepted("Dokument już zaakceptowany", newDocumentElement.getDocumentId());
+        } else {
+   
+
         List<ProductPrice> pricesByProductId = productPriceRepository.findProductPricesByProductId(newDocumentElement.getProductId());
         pricesByProductId.sort((p1, p2) -> {
             if (p1.getIntroductionDate().isBefore(p2.getIntroductionDate()))
@@ -61,11 +73,10 @@ public class JpaDocumentElementService implements DocumentElementService {
                 throw new NotEnoughProductOnStock("Zbyt mała ilość produktu w magazynie : ", product.getQuantity());
             } else {
                 BigDecimal quantity = product.getQuantity();
-                BigDecimal result = quantity.subtract(newDocumentElement.getQuantity());
+                BigDecimal result = quantity.add(newDocumentElement.getQuantity());
                 product.setQuantity(result);
                 productRepository.save(product);
             }
-
             Document document = documentRepository.getById(newDocumentElement.getDocumentId());
             BigDecimal vat = BigDecimal.ZERO;
             for(DocumentElement element : document.getDocumentElements()){
@@ -80,8 +91,9 @@ public class JpaDocumentElementService implements DocumentElementService {
                         .multiply(vat)
                         .add(documentElement.getProductPrice().getSellingPrice()));
             }
+            }
+            return save;
         }
-        return save;
     }
 
     @Override
