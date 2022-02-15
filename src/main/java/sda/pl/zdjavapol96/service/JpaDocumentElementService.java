@@ -67,11 +67,18 @@ public class JpaDocumentElementService implements DocumentElementService {
             }
 
             Document document = documentRepository.getById(newDocumentElement.getDocumentId());
+            BigDecimal vat = BigDecimal.ZERO;
+            for(DocumentElement element : document.getDocumentElements()){
+                vat = vat.add(documentElement.getProduct().getVat())
+                        .subtract(BigDecimal.valueOf(100));
+            }
             BigDecimal totalNet = BigDecimal.ZERO;
             BigDecimal totalGross = BigDecimal.ZERO;
             for (DocumentElement element : document.getDocumentElements()) {
                 totalNet = totalNet.add(documentElement.getProductPrice().getSellingPrice());
-                totalGross = totalGross.add(documentElement.getProductPrice().getSellingPrice().multiply(documentElement.getProduct().getVat()));
+                totalGross = totalGross.add(documentElement.getProductPrice().getSellingPrice()
+                        .multiply(vat)
+                        .add(documentElement.getProductPrice().getSellingPrice()));
             }
         }
         return save;
