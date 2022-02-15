@@ -7,6 +7,7 @@ import sda.pl.zdjavapol96.model.DocumentType;
 import sda.pl.zdjavapol96.model.UserApp;
 
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -20,7 +21,6 @@ public class DocumentDto {
     @NotNull
     private long customerId;
     @NotNull
-    private UserApp user;
+    private long userId;
     private Set<DocumentElement> documentElements;
-
 }

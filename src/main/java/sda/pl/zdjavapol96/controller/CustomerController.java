@@ -4,10 +4,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sda.pl.zdjavapol96.dto.CustomerDto;
+import sda.pl.zdjavapol96.mapper.CustomerMapper;
 import sda.pl.zdjavapol96.model.Customer;
 import sda.pl.zdjavapol96.service.CustomerService;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/customer")
@@ -32,5 +35,10 @@ public class  CustomerController {
         return ResponseEntity.of(customerService.findById(id));
     }
 
-
+    @GetMapping("")
+    public List<CustomerDto> findAll(){
+        return customerService.findAll().stream()
+                .map(CustomerMapper::mapToDto)
+                .collect(Collectors.toList());
+    }
 }
