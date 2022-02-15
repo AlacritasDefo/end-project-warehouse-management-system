@@ -18,7 +18,5 @@ public interface DocumentService {
     List<Document> findByDocumentType(DocumentType documentType);
     List<Document> findByProduct(Product product);
     List<Document> findAll();
-
-
-
+    Document update(Document newUpdateDocument);
 }

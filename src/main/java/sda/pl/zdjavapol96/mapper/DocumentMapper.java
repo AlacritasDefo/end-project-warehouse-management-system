@@ -10,8 +10,7 @@ public class DocumentMapper {
                 .documentElements(document.getDocumentElements())
                 .customerId(document.getCustomer().getId())
                 .issueDate(document.getIssueDate())
-                .user(document.getUser())
-                .total(document.getTotal())
+                .userId(document.getUser().getId())
                 .build();
     }
 }
