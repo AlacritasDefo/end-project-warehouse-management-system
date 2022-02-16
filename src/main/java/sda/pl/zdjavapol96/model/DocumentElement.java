@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 @Table(name = "documentElements")
-
 public class DocumentElement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

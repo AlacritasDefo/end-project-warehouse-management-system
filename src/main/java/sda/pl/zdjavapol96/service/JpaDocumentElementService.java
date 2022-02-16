@@ -1,5 +1,6 @@
 package sda.pl.zdjavapol96.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sda.pl.zdjavapol96.dto.DocumentElementDto;
@@ -16,27 +17,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class JpaDocumentElementService implements DocumentElementService {
+
     private final DocumentRepository documentRepository;
     private final DocumentElementRepository documentElementRepository;
     private final ProductRepository productRepository;
     private final ProductPriceRepository productPriceRepository;
 
 
-
-
-    public JpaDocumentElementService(DocumentRepository documentRepository, DocumentElementRepository documentElementRepository,
-                                     ProductRepository productRepository, ProductPriceRepository productPriceRepository) {
-        this.documentRepository = documentRepository;
-        this.documentElementRepository = documentElementRepository;
-        this.productRepository = productRepository;
-        this.productPriceRepository = productPriceRepository;
-    }
     @Override
     @Transactional
     public DocumentElement add(DocumentElementDto newDocumentElement) {
 
-        if (documentRepository.getById(newDocumentElement.getDocumentId()).getAccepted()== true) {
+        if (documentRepository.getById(newDocumentElement.getDocumentId()).getAccepted()) {
             throw new DocumentAlreadyAccepted("Dokument już zaakceptowany", newDocumentElement.getDocumentId());
         } else {
 
@@ -48,12 +42,8 @@ public class JpaDocumentElementService implements DocumentElementService {
         });
         Optional<ProductPrice> first = pricesByProductId.stream().findFirst();
         DocumentElement documentElement = DocumentElement.builder()
-                .document(Document.builder()
-                        .id(newDocumentElement.getDocumentId())
-                        .build())
-                .product(Product.builder()
-                        .id(newDocumentElement.getProductId())
-                        .build())
+                .document(documentRepository.getById(newDocumentElement.getDocumentId()))
+                .product(productRepository.getById(newDocumentElement.getProductId()))
                 .quantity(newDocumentElement.getQuantity())
                 .productPrice(first.orElseThrow())
                 .build();
@@ -78,18 +68,19 @@ public class JpaDocumentElementService implements DocumentElementService {
             Document document = documentRepository.getById(newDocumentElement.getDocumentId());
             BigDecimal vat = BigDecimal.ZERO;
             for(DocumentElement element : document.getDocumentElements()){
-                vat = vat.add(documentElement.getProduct().getVat())
-                        .subtract(BigDecimal.valueOf(100));
+                vat = vat.add(element.getProduct().getVat()).subtract(BigDecimal.valueOf(100));
             }
             BigDecimal totalNet = BigDecimal.ZERO;
             BigDecimal totalGross = BigDecimal.ZERO;
             for (DocumentElement element : document.getDocumentElements()) {
-                totalNet = totalNet.add(documentElement.getProductPrice().getSellingPrice());
-                totalGross = totalGross.add(documentElement.getProductPrice().getSellingPrice()
+                totalNet = totalNet.add(element.getProductPrice().getSellingPrice());
+                totalGross = totalGross.add(element.getProductPrice().getSellingPrice()
                         .multiply(vat)
-                        .add(documentElement.getProductPrice().getSellingPrice()));
+                        .add(element.getProductPrice().getSellingPrice()));
             }
-
+            document.setTotalGros(totalGross);
+            document.setTotalNet(totalNet);
+            documentRepository.save(document);
             return save;
         }
     }

@@ -85,7 +85,7 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
 
 
         documentService.add(DocumentDto.builder().documentType(DocumentType.PURCHASE_INVOICE)
-                .issueDate(LocalDate.of(2020,11,21))
+                .issueDate(LocalDate.of(2020, 11, 21))
                 .customerId(1)
                 .userId(1)
                 .documentElements(Set.of())
@@ -97,6 +97,7 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
                 .productPriceId(1)
                 .quantity(BigDecimal.valueOf(5))
                 .build());
-    System.out.println(documentElementService.findAll());}
+        System.out.println(documentElementService.findAll());
+    }
 
 }
