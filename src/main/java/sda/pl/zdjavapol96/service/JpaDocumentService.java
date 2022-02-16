@@ -2,6 +2,7 @@ package sda.pl.zdjavapol96.service;
 
 import org.springframework.stereotype.Service;
 import sda.pl.zdjavapol96.dto.DocumentDto;
+import sda.pl.zdjavapol96.exception.DocumentAlreadyAccepted;
 import sda.pl.zdjavapol96.model.*;
 import sda.pl.zdjavapol96.repository.DocumentElementRepository;
 import sda.pl.zdjavapol96.repository.DocumentRepository;
@@ -72,7 +73,11 @@ public class JpaDocumentService implements DocumentService {
 
     @Override
     public Document update(Document newUpdateDocument) {
-        documentRepository.save(newUpdateDocument);
-        return newUpdateDocument;
+        if (documentRepository.getById(newUpdateDocument.getId()).getAccepted() == true)
+            throw new DocumentAlreadyAccepted("Dokument już zaakceptowany, nie można edytować", newUpdateDocument.getId());
+        else {
+            documentRepository.save(newUpdateDocument);
+            return newUpdateDocument;
+        }
     }
 }

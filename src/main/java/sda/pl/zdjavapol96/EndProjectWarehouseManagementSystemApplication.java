@@ -15,16 +15,16 @@ import java.util.Set;
 
 
 @SpringBootApplication
-public class endProjectWarehouseManagementSystemApplication implements CommandLineRunner {
-    private UserAppRepository userAppRepository;
-    private CustomerService customerService;
-    private ProductService productService;
-    private ProductPriceService productPriceService;
+public class EndProjectWarehouseManagementSystemApplication implements CommandLineRunner {
+    private final UserAppRepository userAppRepository;
+    private final CustomerService customerService;
+    private final ProductService productService;
+    private final ProductPriceService productPriceService;
     private final DocumentElementService documentElementService;
     private final DocumentService documentService;
 
 
-    public endProjectWarehouseManagementSystemApplication(UserAppRepository userAppRepository,
+    public EndProjectWarehouseManagementSystemApplication(UserAppRepository userAppRepository,
                                                           CustomerService customerService,
                                                           ProductService productService,
                                                           ProductPriceService productPriceService, DocumentElementService documentElementService, DocumentService documentService){
@@ -37,7 +37,7 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
     }
 
     public static void main(String[] args) {
-        SpringApplication.run(endProjectWarehouseManagementSystemApplication.class, args);
+        SpringApplication.run(EndProjectWarehouseManagementSystemApplication.class, args);
     }
 
     @Override
@@ -97,7 +97,53 @@ public class endProjectWarehouseManagementSystemApplication implements CommandLi
                 .productPriceId(1)
                 .quantity(BigDecimal.valueOf(5))
                 .build());
-        System.out.println(documentElementService.findAll());
+
+        documentService.add(DocumentDto.builder()
+                .documentType(DocumentType.GOODS_RECEIVED_NOTE)
+                .issueDate(LocalDate.now())
+                .customerId(1)
+                .userId(1)
+                .documentElements(Set.of())
+                .build());
+
+        documentElementService.add(DocumentElementDto.builder()
+                .documentId(2)
+                .productId(1)
+                .productPriceId(1)
+                .quantity(BigDecimal.valueOf(100))
+                .build());
+
+        documentService.add(DocumentDto.builder()
+                .documentType(DocumentType.STOCK_ISSUE_CONFIRMATION)
+                .userId(1)
+                .customerId(1)
+                .issueDate(LocalDate.now())
+                .documentElements(Set.of())
+                .build());
+
+        documentElementService.add(DocumentElementDto.builder()
+                        .documentId(3)
+                        .quantity(BigDecimal.valueOf(23))
+                        .productId(1)
+                .build());
+
+        documentService.add(DocumentDto.builder()
+                .documentType(DocumentType.SALES_INVOICE)
+                .customerId(1)
+                .issueDate(LocalDate.of(2019,10,12))
+                .documentElements(Set.of())
+                .userId(1)
+                .build());
+        documentElementService.add(DocumentElementDto.builder()
+                .productId(1)
+                .productPriceId(0)
+                .quantity(BigDecimal.valueOf(100))
+                .documentId(4)
+                .build());
+
+
+
+
     }
 
 }
