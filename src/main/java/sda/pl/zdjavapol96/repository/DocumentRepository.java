@@ -2,20 +2,15 @@ package sda.pl.zdjavapol96.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import sda.pl.zdjavapol96.dto.DocumentDto;
 import sda.pl.zdjavapol96.model.Document;
 import sda.pl.zdjavapol96.model.DocumentType;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface DocumentRepository extends JpaRepository<Document, Long> {
 
     List<Document> findDocumentByDocumentType(DocumentType documentType);
-    List<Document> findDocumentByCustomerTaxId(String customerTaxId);
-    List<Document> findDocumentByIssueDate(LocalDate issueDate);
-
-
-    Optional<List<Document>> findDocumentByCustomerId(long id);
+    List<Document> findByCustomerId(long id);
 }

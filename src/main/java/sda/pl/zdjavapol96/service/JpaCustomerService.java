@@ -29,7 +29,7 @@ public class JpaCustomerService implements CustomerService{
     }
 
     @Override
-    public List<Customer> findByName(String name) {
+    public Optional<Customer> findByName(String name) {
         return customerRepository.findByName(name);
     }
 

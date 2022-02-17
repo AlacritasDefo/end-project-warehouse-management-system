@@ -11,7 +11,9 @@ import sda.pl.zdjavapol96.model.ProductPrice;
 import sda.pl.zdjavapol96.service.ProductPriceService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/productprice")
@@ -33,4 +35,17 @@ public class ProductPriceController {
         final Optional<ProductPrice> optionalPrice = productPriceService.findById(id);
         return optionalPrice.map(price -> ResponseEntity.ok(ProductPriceMapper.mapToDto(price))).orElseGet(() -> ResponseEntity.of(Optional.empty()));
     }
+
+    @GetMapping
+    public List<ProductPriceDto> findAll(){
+        return productPriceService.findAll().stream()
+                .map(ProductPriceMapper::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    @DeleteMapping
+    public void delete(@PathVariable long id){
+        productPriceService.deleteById(id);
+    }
+
 }

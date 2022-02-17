@@ -30,7 +30,6 @@ public class  CustomerController {
                 .body(customer);
     }
 
-
     @GetMapping("/{id}")
     public ResponseEntity<CustomerDto> findById(@PathVariable long id) {
         final Optional<Customer> optionalCustomer = customerService.findById(id);
@@ -43,4 +42,10 @@ public class  CustomerController {
                 .map(CustomerMapper::mapToDto)
                 .collect(Collectors.toList());
     }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable long id){
+        customerService.deleteById(id);
+    }
+
 }

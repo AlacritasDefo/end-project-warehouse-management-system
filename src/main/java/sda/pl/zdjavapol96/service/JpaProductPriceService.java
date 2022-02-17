@@ -33,7 +33,17 @@ public class JpaProductPriceService implements ProductPriceService {
     }
 
     @Override
+    public List<ProductPrice> findAll() {
+        return productPriceRepository.findAll();
+    }
+
+    @Override
     public Optional<ProductPrice> findById(long id) {
         return productPriceRepository.findById(id);
+    }
+
+    @Override
+    public void deleteById(long id) {
+        productPriceRepository.deleteById(id);
     }
 }

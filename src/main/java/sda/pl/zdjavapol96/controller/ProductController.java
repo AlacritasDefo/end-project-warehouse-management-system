@@ -12,7 +12,9 @@ import sda.pl.zdjavapol96.model.Product;
 import sda.pl.zdjavapol96.service.ProductService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/product")
@@ -35,4 +37,17 @@ public class ProductController {
         final Optional<Product> optionalProduct = productService.findById(id);
         return optionalProduct.map(product -> ResponseEntity.ok(ProductMapper.mapToDto(product))).orElseGet(() -> ResponseEntity.of(Optional.empty()));
     }
+
+    @GetMapping("")
+    public List<ProductDto> findAll(){
+        return productService.findAll().stream()
+                .map(ProductMapper::mapToDto)
+                .collect(Collectors.toList());
+    }
+
+    @DeleteMapping
+    public void delete(@PathVariable long id){
+        productService.deleteById(id);
+    }
+
 }

@@ -46,8 +46,8 @@ public class JpaDocumentService implements DocumentService {
     }
 
     @Override
-    public Optional<List<Document>> findByCustomer(Customer customer) {
-        return  documentRepository.findDocumentByCustomerId(customer.getId());
+    public List<Document> findByCustomerId(long customerId) {
+        return documentRepository.findByCustomerId(customerId);
     }
 
     @Override
@@ -79,5 +79,10 @@ public class JpaDocumentService implements DocumentService {
             documentRepository.save(newUpdateDocument);
             return newUpdateDocument;
         }
+    }
+
+    @Override
+    public void deleteById(long id) {
+        documentRepository.deleteById(id);
     }
 }

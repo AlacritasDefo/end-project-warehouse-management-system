@@ -13,10 +13,17 @@ import java.util.Optional;
 public interface DocumentService {
     Document add(DocumentDto newDocument);
 
-    Optional<List<Document>> findByCustomer(Customer customer);
+    List<Document> findByCustomerId(long customerId);
+
     Optional<Document> findById(long id);
     List<Document> findByDocumentType(DocumentType documentType);
+
     List<Document> findByProduct(Product product);
+
     List<Document> findAll();
-    Document update(Document updatedDocument);
+
+    Document update(Document newUpdateDocument);
+
+    void deleteById(long id);
+
 }
