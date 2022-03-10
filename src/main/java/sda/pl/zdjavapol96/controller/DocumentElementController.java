@@ -6,8 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sda.pl.zdjavapol96.dto.DocumentElementDto;
 import sda.pl.zdjavapol96.mapper.DocumentElementMapper;
-import sda.pl.zdjavapol96.mapper.DocumentMapper;
-import sda.pl.zdjavapol96.model.Document;
 import sda.pl.zdjavapol96.model.DocumentElement;
 import sda.pl.zdjavapol96.service.DocumentElementService;
 
@@ -33,8 +31,9 @@ public class DocumentElementController {
                 .collect(Collectors.toList());
     }
     @GetMapping("/{id}")
-    public Optional<DocumentElement> findById(@PathVariable long id){
-        return documentElementService.findById(id);
+    public ResponseEntity<DocumentElementDto> findById(@PathVariable long id){
+        final Optional<DocumentElement> optionalDocument = documentElementService.findById(id);
+        return optionalDocument.map(document -> ResponseEntity.ok(DocumentElementMapper.mapToDto(document))).orElseGet(() -> ResponseEntity.of(Optional.empty()));
     }
     @PostMapping("")
     public ResponseEntity<DocumentElement> add(@Valid @RequestBody DocumentElementDto dto){

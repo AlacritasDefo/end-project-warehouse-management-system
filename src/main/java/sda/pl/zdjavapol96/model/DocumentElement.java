@@ -12,7 +12,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Entity
 @Table(name = "documentElements")
-
 public class DocumentElement {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +24,5 @@ public class DocumentElement {
     private BigDecimal quantity;
     @ManyToOne(targetEntity = ProductPrice.class)
     private ProductPrice productPrice;
+    private Boolean locked;
 }

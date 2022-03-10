@@ -9,7 +9,7 @@ public class ProductMapper {
                 .productName(product.getProductName())
                 .unit(product.getUnit())
                 .quantity(product.getQuantity())
-                .isSaleable(product.getIsSaleable())
+                .vat(product.getVat())
                 .build();
     }
 }

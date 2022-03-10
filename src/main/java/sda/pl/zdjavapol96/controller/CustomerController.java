@@ -10,10 +10,11 @@ import sda.pl.zdjavapol96.service.CustomerService;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("api/customer")
+@RequestMapping("/api")
 public class  CustomerController {
     private final CustomerService customerService;
 
@@ -22,23 +23,29 @@ public class  CustomerController {
     }
 
 
-    @PostMapping("")
+    @PostMapping("/customer")
     public ResponseEntity<Customer> add(@Valid @RequestBody CustomerDto customerDto) {
         final Customer customer = customerService.add(customerDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(customer);
     }
 
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Customer> findById(@PathVariable long id) {
-        return ResponseEntity.of(customerService.findById(id));
+    @GetMapping("/customer/{id}")
+    public ResponseEntity<CustomerDto> findById(@PathVariable long id) {
+        final Optional<Customer> optionalCustomer = customerService.findById(id);
+        return optionalCustomer.map(customer -> ResponseEntity.ok(CustomerMapper.mapToDto(customer))).orElseGet(() -> ResponseEntity.of(Optional.empty()));
     }
 
-    @GetMapping("")
+    @GetMapping("/customer")
     public List<CustomerDto> findAll(){
         return customerService.findAll().stream()
                 .map(CustomerMapper::mapToDto)
                 .collect(Collectors.toList());
     }
+
+    @DeleteMapping("/customer/{id}")
+    public void delete(@PathVariable long id){
+        customerService.deleteById(id);
+    }
+
 }

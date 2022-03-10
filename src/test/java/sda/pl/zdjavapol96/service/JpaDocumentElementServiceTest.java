@@ -8,8 +8,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class JpaDocumentElementServiceTest {
 
     @Test
-    @CsvSource({""})
     void add() {
+
     }
 
     @Test

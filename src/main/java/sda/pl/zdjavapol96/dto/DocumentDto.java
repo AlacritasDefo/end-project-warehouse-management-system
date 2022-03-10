@@ -2,9 +2,8 @@ package sda.pl.zdjavapol96.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import sda.pl.zdjavapol96.model.DocumentElement;
 import sda.pl.zdjavapol96.model.DocumentType;
-import sda.pl.zdjavapol96.model.UserApp;
+
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -14,6 +13,7 @@ import java.util.Set;
 @Data
 @Builder
 public class DocumentDto {
+    private Long id;
     @NotNull
     private DocumentType documentType;
     @NotNull
@@ -22,5 +22,8 @@ public class DocumentDto {
     private long customerId;
     @NotNull
     private long userId;
-    private Set<DocumentElement> documentElements;
+    private Set<DocumentElementDto> documentElements;
+    private BigDecimal totalNet;
+    private BigDecimal totalGros;
+
 }

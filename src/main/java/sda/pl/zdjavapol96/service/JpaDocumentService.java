@@ -1,7 +1,11 @@
 package sda.pl.zdjavapol96.service;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sda.pl.zdjavapol96.dto.DocumentDto;
+
+import sda.pl.zdjavapol96.exception.DocumentAlreadyAccepted;
+import sda.pl.zdjavapol96.mapper.DocumentMapper;
 import sda.pl.zdjavapol96.model.*;
 import sda.pl.zdjavapol96.repository.DocumentElementRepository;
 import sda.pl.zdjavapol96.repository.DocumentRepository;
@@ -28,7 +32,7 @@ public class JpaDocumentService implements DocumentService {
     }
 
     @Override
-    public Document add(DocumentDto newDocument) {
+    public DocumentDto add(DocumentDto newDocument) {
         Document document = Document.builder()
                 .documentType(newDocument.getDocumentType())
                 .customer(Customer.builder()
@@ -41,12 +45,14 @@ public class JpaDocumentService implements DocumentService {
                 .totalGros(BigDecimal.ZERO)
                 .accepted(false)
                 .build();
-        return documentRepository.save(document);
+        Document save = documentRepository.save(document);
+        return DocumentMapper.mapToDto(save);
     }
 
     @Override
-    public Optional<List<Document>> findByCustomer(Customer customer) {
-        return  documentRepository.findDocumentByCustomerId(customer.getId());
+    @Transactional
+    public List<Document> findByCustomerId(long customerId) {
+        return documentRepository.findByCustomerId(customerId);
     }
 
     @Override
@@ -72,7 +78,16 @@ public class JpaDocumentService implements DocumentService {
 
     @Override
     public Document update(Document newUpdateDocument) {
-        documentRepository.save(newUpdateDocument);
-        return newUpdateDocument;
+        if (Boolean.TRUE.equals(documentRepository.getById(newUpdateDocument.getId()).getAccepted()))
+            throw new DocumentAlreadyAccepted("Dokument już zaakceptowany, nie można edytować", newUpdateDocument.getId());
+        else {
+            documentRepository.save(newUpdateDocument);
+            return newUpdateDocument;
+        }
+    }
+
+    @Override
+    public void deleteById(long id) {
+        documentRepository.deleteById(id);
     }
 }
