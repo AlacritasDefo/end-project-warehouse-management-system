@@ -1,13 +1,13 @@
 package sda.pl.zdjavapol96.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashSet;
-import java.util.LinkedHashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -37,6 +37,7 @@ public class Document {
     @Column(nullable = false)
     private LocalDate issueDate;
     @ManyToOne(targetEntity = UserApp.class)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private UserApp user;
     @Column(name = "totalnet")
     private BigDecimal totalNet;

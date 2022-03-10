@@ -41,7 +41,7 @@ public class EndProjectWarehouseManagementSystemApplication implements CommandLi
     }
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         userAppRepository.save(
                 UserApp.builder()
                         .username("Arek")
@@ -67,6 +67,12 @@ public class EndProjectWarehouseManagementSystemApplication implements CommandLi
                         .vat(BigDecimal.valueOf(23))
                         .isSaleable(true)
                 .build());
+        productService.add(ProductDto.builder()
+                .productName("Klucz Francuski")
+                .quantity(BigDecimal.valueOf(20))
+                        .unit("szt")
+                        .vat(BigDecimal.valueOf(23))
+                .build());
 
 
         productPriceService.add(ProductPriceDto.builder()
@@ -89,6 +95,13 @@ public class EndProjectWarehouseManagementSystemApplication implements CommandLi
                 .customerId(1)
                 .userId(1)
                 .documentElements(Set.of())
+                .build());
+
+        documentElementService.add(DocumentElementDto.builder()
+                .documentId(1)
+                .productId(1)
+                .productPriceId(1)
+                .quantity(BigDecimal.valueOf(5))
                 .build());
 
         documentElementService.add(DocumentElementDto.builder()

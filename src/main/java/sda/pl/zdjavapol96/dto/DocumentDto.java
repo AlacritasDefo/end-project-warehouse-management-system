@@ -13,6 +13,7 @@ import java.util.Set;
 @Data
 @Builder
 public class DocumentDto {
+    private Long id;
     @NotNull
     private DocumentType documentType;
     @NotNull

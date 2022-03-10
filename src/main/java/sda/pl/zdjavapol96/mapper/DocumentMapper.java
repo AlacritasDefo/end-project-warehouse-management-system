@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 public class DocumentMapper {
     public static DocumentDto mapToDto(Document document){
         return DocumentDto.builder()
+                .id(document.getId())
                 .documentType(document.getDocumentType())
                 .documentElements(document.getDocumentElements().stream()
                         .map(DocumentElementMapper::mapToDto)

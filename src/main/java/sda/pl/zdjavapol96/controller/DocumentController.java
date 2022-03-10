@@ -4,7 +4,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sda.pl.zdjavapol96.dto.DocumentDto;
 import sda.pl.zdjavapol96.mapper.DocumentMapper;
-import sda.pl.zdjavapol96.model.Customer;
 import sda.pl.zdjavapol96.model.Document;
 import sda.pl.zdjavapol96.model.DocumentType;
 import sda.pl.zdjavapol96.service.DocumentService;
@@ -43,10 +42,17 @@ public class DocumentController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Document> add(@RequestBody DocumentDto documentDto) {
+    public ResponseEntity<DocumentDto> add(@RequestBody DocumentDto documentDto) {
         return ResponseEntity.ok(documentService.add(documentDto));
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable long id){ documentService.deleteById(id);}
+
+    @GetMapping("/customer/{id}")
+    public List<DocumentDto> findByCustomerId(@PathVariable long id){
+        return documentService.findByCustomerId(id).stream()
+                .map(DocumentMapper::mapToDto)
+                .collect(Collectors.toList());
+    }
 }

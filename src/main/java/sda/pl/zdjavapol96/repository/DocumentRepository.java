@@ -2,7 +2,6 @@ package sda.pl.zdjavapol96.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import sda.pl.zdjavapol96.dto.DocumentDto;
 import sda.pl.zdjavapol96.model.Document;
 import sda.pl.zdjavapol96.model.DocumentType;
 

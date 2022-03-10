@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sda.pl.zdjavapol96.dto.DocumentElementDto;
+import sda.pl.zdjavapol96.model.*;
 import sda.pl.zdjavapol96.exception.DocumentAlreadyAccepted;
 import sda.pl.zdjavapol96.exception.NotEnoughProductOnStock;
 import sda.pl.zdjavapol96.exception.ProductIsNotSalable;
-import sda.pl.zdjavapol96.model.*;
 import sda.pl.zdjavapol96.repository.DocumentElementRepository;
 import sda.pl.zdjavapol96.repository.DocumentRepository;
 import sda.pl.zdjavapol96.repository.ProductPriceRepository;
@@ -25,21 +25,19 @@ public class JpaDocumentElementService implements DocumentElementService {
     private final DocumentElementRepository documentElementRepository;
     private final ProductRepository productRepository;
     private final ProductPriceRepository productPriceRepository;
-    
+
     @Override
     @Transactional
     public DocumentElement add(DocumentElementDto newDocumentElement) {
-        if (documentRepository.getById(newDocumentElement.getDocumentId()).getAccepted()) {
+        if (Boolean.TRUE.equals(documentRepository.getById(newDocumentElement.getDocumentId()).getAccepted())) {
             throw new DocumentAlreadyAccepted("Dokument już zaakceptowany", newDocumentElement.getDocumentId());
         } else {
             List<ProductPrice> pricesByProductId = productPriceRepository.findProductPricesByProductId(newDocumentElement.getProductId());
-            pricesByProductId.sort((p1, p2) -> {
-                return takeNewestPrice(newDocumentElement, p1, p2);
-            });
+            pricesByProductId.sort((p1, p2) -> takeNewestPrice(newDocumentElement, p1, p2));
             Optional<ProductPrice> first = pricesByProductId.stream().findFirst();
             Product product1 = productRepository.getById(newDocumentElement.getProductId());
-            if(!product1.getIsSaleable() &&
-                    documentRepository.getById(newDocumentElement.getDocumentId()).getDocumentType()==DocumentType.SALES_INVOICE) {
+            if (Boolean.FALSE.equals(product1.getIsSaleable()) &&
+                    documentRepository.getById(newDocumentElement.getDocumentId()).getDocumentType() == DocumentType.SALES_INVOICE) {
                 throw new ProductIsNotSalable("Produkt nie jest na sprzedaż", newDocumentElement.getProductId());
             } else {
                 DocumentElement documentElement = createDocumentElement(newDocumentElement, first);
@@ -57,16 +55,20 @@ public class JpaDocumentElementService implements DocumentElementService {
                 for (DocumentElement element : document.getDocumentElements()) {
                     if (documentElement.getDocument().getDocumentType() == DocumentType.SALES_INVOICE
                             || documentElement.getDocument().getDocumentType() == DocumentType.STOCK_ISSUE_CONFIRMATION) {
-                        totalNet = totalNet.add(element.getProductPrice().getSellingPrice()).multiply(element.getQuantity());
-                        totalGross = getSellingTotalGross(totalGross, element);
+                        for (int i = 0; i < element.getQuantity().intValue(); i++) {
+                            totalNet = totalNet.add(element.getProductPrice().getSellingPrice());
+                            totalGross = getSellingTotalGross(totalGross, element);
+                        }
                     } else {
-                        totalNet = totalNet.add(element.getProductPrice().getPurchasePrice().multiply(element.getQuantity()));
-                        totalGross = getPurchaseTotalGross(totalGross, element);
+                        for (int i = 0; i < element.getQuantity().intValue(); i++) {
+                            totalNet = totalNet.add(element.getProductPrice().getPurchasePrice());
+                            totalGross = getPurchaseTotalGross(totalGross, element);
+                        }
                     }
                 }
-                    document.setTotalGros(totalGross);
-                    document.setTotalNet(totalNet);
-                    documentRepository.save(document);
+                document.setTotalGros(totalGross);
+                document.setTotalNet(totalNet);
+                documentRepository.save(document);
                 return save;
             }
         }
@@ -76,20 +78,18 @@ public class JpaDocumentElementService implements DocumentElementService {
         return totalGross.add(element.getProductPrice().getPurchasePrice()
                 .multiply(element.getProduct().getVat())
                 .divide(BigDecimal.valueOf(100))
-                .add(element.getProductPrice().getPurchasePrice())
-                .multiply(element.getQuantity()));
+                .add(element.getProductPrice().getPurchasePrice()));
     }
 
     private BigDecimal getSellingTotalGross(BigDecimal totalGross, DocumentElement element) {
         return totalGross.add(element.getProductPrice().getSellingPrice()
                 .multiply(element.getProduct().getVat())
                 .divide(BigDecimal.valueOf(100))
-                .add(element.getProductPrice().getSellingPrice())
-                .multiply(element.getQuantity()));
+                .add(element.getProductPrice().getSellingPrice()));
     }
 
     private int takeNewestPrice(DocumentElementDto newDocumentElement, ProductPrice p1, ProductPrice p2) {
-        if (p1.getIntroductionDate().isBefore(p2.getIntroductionDate()) && 
+        if (p1.getIntroductionDate().isBefore(p2.getIntroductionDate()) &&
                 p1.getIntroductionDate().isBefore(documentRepository.getById(newDocumentElement.getDocumentId()).getIssueDate()))
             return 1;
         else return -1;

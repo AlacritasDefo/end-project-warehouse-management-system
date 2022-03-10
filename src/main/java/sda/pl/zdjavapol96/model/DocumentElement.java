@@ -24,4 +24,5 @@ public class DocumentElement {
     private BigDecimal quantity;
     @ManyToOne(targetEntity = ProductPrice.class)
     private ProductPrice productPrice;
+    private Boolean locked;
 }

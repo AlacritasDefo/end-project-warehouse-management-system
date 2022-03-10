@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 import sda.pl.zdjavapol96.model.ProductPrice;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface ProductPriceRepository extends JpaRepository<ProductPrice, Long> {
